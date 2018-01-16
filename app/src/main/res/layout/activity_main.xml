@@ -3,10 +3,11 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
-    <TextView
+    <Button
         android:id="@+id/mclick"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:text="打开新假面" />
+        android:text="嗲机开始网络预加载，跳转页面" />
+
 
 </LinearLayout>

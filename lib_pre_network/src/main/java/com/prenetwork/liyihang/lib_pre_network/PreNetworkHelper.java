@@ -35,7 +35,7 @@ public class PreNetworkHelper {
         objs=new HashMap<>();
     }
 
-    public void addRequestObservable(final PNRequestObservable requestObservable){
+    public PreNetworkHelper addRequestObservable(final PNRequestObservable requestObservable){
         PNRequestObservable ro = objs.get(requestObservable.getId());
         if (ro==null)
         {
@@ -47,25 +47,29 @@ public class PreNetworkHelper {
                 }
             });
         }
+        return this;
     }
 
-    public void addObserver(PNObserver observer){
+    public PreNetworkHelper addObserver(PNObserver observer){
         PNRequestObservable ro = objs.get(observer.getId());
         if (ro!=null)
         {
             ro.addObserver(observer);
         }
+        return this;
     }
 
-    public void removeAllObservable(){
+    public PreNetworkHelper removeAllObservable(){
         Set<String> strings = objs.keySet();
         for (String string : strings) {
             objs.remove(string);
         }
+        return this;
     }
 
-    public void removeRequestObservable(PNIDInterface id){
-        objs.remove(id.getId());
+    public PreNetworkHelper removeRequestObservable(String id){
+        objs.remove(id);
+        return this;
     }
 
 
