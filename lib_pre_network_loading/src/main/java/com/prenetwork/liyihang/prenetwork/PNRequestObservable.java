@@ -7,6 +7,7 @@ import java.net.HttpURLConnection;
 import java.net.URL;
 import java.util.Map;
 import java.util.Observable;
+import java.util.Observer;
 import java.util.Set;
 
 /**
@@ -21,19 +22,25 @@ public abstract class PNRequestObservable extends Observable implements PNReques
         return result;
     }
 
-    @Override
     public int getConnectTimeout() {
         return 5000;
     }
 
-    @Override
     public boolean getUseCachesEnable() {
         return false;
     }
 
-    @Override
     public String getRequestMethod() {
         return "POST";
+    }
+
+    @Override
+    public synchronized void addObserver(Observer o) {
+        super.addObserver(o);
+        if (result!=null)
+        {
+            notifyObservers();
+        }
     }
 
     @Override
@@ -55,9 +62,12 @@ public abstract class PNRequestObservable extends Observable implements PNReques
                     httpURLConnection.addRequestProperty(string, requestHeader.get(string));
                 }
             }
-            PrintWriter writer=new PrintWriter(httpURLConnection.getOutputStream());
-            writer.write(getRequestParms());
-            writer.flush();
+            if (getRequestParms()!=null)
+            {
+                PrintWriter writer=new PrintWriter(httpURLConnection.getOutputStream());
+                writer.write(getRequestParms());
+                writer.flush();
+            }
             if (httpURLConnection.getResponseCode()==200)
             {
                 InputStream inputStream = httpURLConnection.getInputStream();

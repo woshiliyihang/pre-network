@@ -10,8 +10,5 @@ public interface PNRequestInterface extends PNIDInterface {
     Map<String, String> getRequestHeader();
     String getRequestParms();
     String getRequestUrl();
-    int getConnectTimeout();
-    boolean getUseCachesEnable();
-    String getRequestMethod();
     void handlerRequest();
 }
