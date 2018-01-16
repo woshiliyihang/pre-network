@@ -46,6 +46,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         public String getRequestUrl() {
             return "http://sijienet.com";
         }
+
     }
 
     private class Result extends PNObserver{
