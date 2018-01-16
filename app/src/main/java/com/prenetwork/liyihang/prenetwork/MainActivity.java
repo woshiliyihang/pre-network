@@ -1,17 +1,22 @@
 package com.prenetwork.liyihang.prenetwork;
 
-import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.support.v7.app.AppCompatActivity;
 import android.text.Html;
 import android.util.Log;
 import android.view.View;
 import android.widget.TextView;
+
+import com.prenetwork.liyihang.lib_pre_network.PNObserver;
+import com.prenetwork.liyihang.lib_pre_network.PNRequestObservable;
+import com.prenetwork.liyihang.lib_pre_network.PreNetworkHelper;
 
 import java.util.Map;
 
 public class MainActivity extends AppCompatActivity implements View.OnClickListener {
 
     private TextView mclick;
+    private Result result;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -21,11 +26,13 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         mclick=findViewById(R.id.mclick);
         mclick.setOnClickListener(this);
 
+        PreNetworkHelper.getInstance().removeAllObservable();
         PreNetworkHelper.getInstance().addRequestObservable(new Request());
+        result = new Result();
     }
 
 
-    private class Request extends PNRequestObservable{
+    private class Request extends PNRequestObservable {
 
         @Override
         public String getId() {
@@ -49,7 +56,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
     }
 
-    private class Result extends PNObserver{
+    private class Result extends PNObserver {
 
         @Override
         public String getId() {
@@ -62,6 +69,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             runOnUiThread(new Runnable() {
                 @Override
                 public void run() {
+                    Log.i(MainActivity.class.getSimpleName(), result);
                     mclick.setText(Html.fromHtml(result));
                 }
             });
@@ -70,6 +78,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
     @Override
     public void onClick(View view) {
-        PreNetworkHelper.getInstance().addObserver(new Result());
+        Log.i(getClass().getSimpleName(), "click");
+        PreNetworkHelper.getInstance().addObserver(result);
     }
 }
