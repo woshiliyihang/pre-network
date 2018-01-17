@@ -38,6 +38,6 @@ public class OtherActivity extends AppCompatActivity{
             public String getId() {
                 return "web_data";
             }
-        });
+        }).removeRequestObservable("web_data");
     }
 }

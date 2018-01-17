@@ -40,7 +40,7 @@ public class PNGetPostUtil {
             // 打开和URL之间的连接
             conn = (HttpURLConnection) realUrl.openConnection();
             conn.setConnectTimeout(10000);
-            conn.setReadTimeout(10000);
+            conn.setReadTimeout(20000);
             conn.setRequestMethod("GET");
             conn.setUseCaches(false);
             conn.setDoOutput(true);
@@ -108,7 +108,7 @@ public class PNGetPostUtil {
             // 打开和URL之间的连接
             conn = (HttpURLConnection) realUrl.openConnection();
             conn.setConnectTimeout(10000);
-            conn.setReadTimeout(10000);
+            conn.setReadTimeout(20000);
             conn.setRequestMethod("POST");
             conn.setUseCaches(false);
             conn.setDoOutput(true);

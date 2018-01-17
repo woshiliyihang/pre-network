@@ -1,4 +1,5 @@
 apply plugin: 'com.android.library'
+apply plugin: 'com.novoda.bintray-release'//添加
 
 android {
     compileSdkVersion 26
@@ -32,4 +33,14 @@ dependencies {
     androidTestImplementation 'com.android.support.test:runner:1.0.1'
     androidTestImplementation 'com.android.support.test.espresso:espresso-core:3.0.1'
     implementation 'com.squareup.okhttp3:okhttp:3.9.1'
+}
+
+//添加
+publish {
+    userOrg = 'mhhyoucom'//bintray.com用户名
+    groupId = 'com.liyihang'//jcenter上的路径
+    artifactId = 'pre-network'//项目名称
+    publishVersion = '1.0.1'//版本号
+    desc = '网络预加载框架，前置网络加载框架'//描述，不重要
+    website = 'https://github.com/woshiliyihang/pre-network'//网站，不重要；尽量模拟github上的地址，例如我这样的；当然你有地址最好了
 }
