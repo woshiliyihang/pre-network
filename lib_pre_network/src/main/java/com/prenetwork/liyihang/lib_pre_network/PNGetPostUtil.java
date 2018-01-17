@@ -63,10 +63,10 @@ public class PNGetPostUtil {
             URL realUrl = new URL(url);
             // 打开和URL之间的连接
             conn = (HttpURLConnection) realUrl.openConnection();
-            conn.setConnectTimeout(10000);
-            conn.setReadTimeout(20000);
+//            conn.setConnectTimeout(10000);
+//            conn.setReadTimeout(20000);
             conn.setRequestMethod(method);
-            conn.setUseCaches(false);
+//            conn.setUseCaches(false);
             conn.setDoOutput(true);
             conn.setDoInput(true);
 
