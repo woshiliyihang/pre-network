@@ -10,7 +10,7 @@ pre-network：是基于观察者模式的网络预先前置加载框架，可以
 
 添加依赖：
 ```
-compile 'com.liyihang:pre-network:1.0.1'
+implementation 'com.liyihang:pre-network:1.2.2'
 ```
 
 每个被观察者网络都必须有一个string 唯一id标识他，观察者订阅也是通过唯一的id来找到被观察者然后订阅。
