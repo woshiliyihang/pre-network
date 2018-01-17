@@ -24,8 +24,7 @@ public abstract class PNRequestObservable extends Observable implements PNReques
         super.addObserver(o);
         if (result!=null)
         {
-            setChanged();
-            notifyObservers();
+            dataChange();
         }
     }
 
@@ -37,6 +36,10 @@ public abstract class PNRequestObservable extends Observable implements PNReques
         if ("POST".equals(getRequestMethod()))
             result = PNGetPostUtil.sendPost(getRequestUrl(), getRequestParms(), getRequestHeader());
 
+        dataChange();
+    }
+
+    protected void dataChange(){
         setChanged();
         notifyObservers();
     }
