@@ -1,4 +1,3 @@
-
 # pre-network 网络预加框架
 
 网络预加载框架，监听式网络前置加载框架-Network preload, network preload the framework.- pre-network
@@ -98,7 +97,7 @@ public class PNQuickRequest extends PNRequestObservable {
 PreNetworkHelper.getInstance().addObserver(new PNObserver() {
             @Override
             public void call(PNRequestObservable observable) {
-                final String result = observable.getResult();// 获取网络请求内容 ， 这里发生在非ui线程中。
+                final String result = observable.getResult();// 获取网络请求内容 ， 这里发生在非ui线程中。observable就是被观察者实例
                 runOnUiThread(new Runnable() {
                     @Override
                     public void run() {
@@ -113,4 +112,3 @@ PreNetworkHelper.getInstance().addObserver(new PNObserver() {
             }
         }).removeRequestObservable("web_data");// 请求用完了可以移除 ，如果不移除将会一直保存在内存中
 ```
-
