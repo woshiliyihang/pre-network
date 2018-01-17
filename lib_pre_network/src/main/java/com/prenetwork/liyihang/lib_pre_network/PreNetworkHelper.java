@@ -29,7 +29,6 @@ public class PreNetworkHelper {
     }
 
     private Map<String, PNRequestObservable> objs;
-    public static ExecutorService executor= Executors.newFixedThreadPool(3);
 
     public PreNetworkHelper() {
         objs=new HashMap<>();
@@ -40,12 +39,7 @@ public class PreNetworkHelper {
         if (ro==null)
         {
             objs.put(requestObservable.getId(), requestObservable);
-            executor.submit(new Runnable() {
-                @Override
-                public void run() {
-                    requestObservable.handlerRequest();
-                }
-            });
+            requestObservable.handlerRequest();
         }
         return this;
     }
