@@ -50,7 +50,7 @@ public class MainActivity extends PNBaseActivity implements View.OnClickListener
         {
             PreNetworkHelper.getInstance()
                     .removeRequestObservable("web_data")
-                    .addRequestObservable(new PNQuickRequest("web_data", "http://baidu.com/"));
+                    .addRequestObservable(new PNQuickRequest("web_data", "http://sijienet.com/"));
             startActivity(new Intent(this, OtherActivity.class));
         }
     }

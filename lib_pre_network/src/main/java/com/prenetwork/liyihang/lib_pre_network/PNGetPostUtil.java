@@ -32,65 +32,7 @@ public class PNGetPostUtil {
      * @return URL所代表远程资源的响应
      */
     public static String sendGet(String url, String params, Map<String , String> header) {
-        String result=null;
-        HttpURLConnection conn=null;
-        try {
-            String urlName = url;
-            URL realUrl = new URL(urlName);
-            // 打开和URL之间的连接
-            conn = (HttpURLConnection) realUrl.openConnection();
-            conn.setConnectTimeout(10000);
-            conn.setReadTimeout(20000);
-            conn.setRequestMethod("GET");
-            conn.setUseCaches(false);
-            conn.setDoOutput(true);
-            conn.setDoInput(true);
-
-            // 设置通用的请求属性
-            conn.setRequestProperty("accept", "*/*");
-            conn.setRequestProperty("connection", "Keep-Alive");
-            conn.setRequestProperty("Accept-Encoding", "gzip, deflate, br");
-//            conn.setRequestProperty("Accept-Language",
-//                    "zh-CN,zh;q=0.8,zh-TW;q=0.7,zh-HK;q=0.5,en-US;q=0.3,en;q=0.2");
-//            conn.setRequestProperty("user-agent",
-//                    "Mozilla/5.0 (X11; Ubuntu; Linux x86_64; rv:57.0) Gecko/20100101 Firefox/57.0");
-
-            if (header!=null)
-            {
-                Set<String> strings = header.keySet();
-                for (String string : strings) {
-                    conn.setRequestProperty(string, header.get(string));
-                }
-            }
-
-            if (params!=null)
-            {
-                // 获取URLConnection对象对应的输出流
-                PrintWriter out = new PrintWriter(conn.getOutputStream());
-                // 发送请求参数
-                out.print(params);
-                // flush输出流的缓冲
-                out.flush();
-                out.close();
-            }
-
-            if (conn.getResponseCode()==200
-                    || conn.getResponseCode() == 302
-                    || conn.getResponseCode() == 301){
-                result = getBytesByInputStream(conn.getInputStream());
-            }
-
-        } catch (Exception e) {
-            Log.i("url_connection","发送GET请求出现异常！" + e.getMessage());
-            e.printStackTrace();
-        }
-        // 使用finally块来关闭输入流
-        finally {
-            if (conn!=null) {
-                conn.disconnect();
-            }
-        }
-        return result;
+        return send(url, params, header, "GET");
     }
 
     /**
@@ -101,6 +43,20 @@ public class PNGetPostUtil {
      * @return URL所代表远程资源的响应
      */
     public static String sendPost(String url, String params, Map<String , String> header) {
+        return send(url, params, header, "POST");
+    }
+
+    private static void handleConn(HttpURLConnection conn) {
+        conn.setRequestProperty("accept", "*/*");
+        conn.setRequestProperty("connection", "Keep-Alive");
+        conn.setRequestProperty("Accept-Encoding", "gzip, deflate");
+        conn.setRequestProperty("Accept-Language",
+                "zh-CN,zh;q=0.8,zh-TW;q=0.7,zh-HK;q=0.5,en-US;q=0.3,en;q=0.2");
+        conn.setRequestProperty("user-agent",
+                "Mozilla/5.0 (Linux; Android 7.0; PLUS Build/NRD90M) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/61.0.3163.98 Mobile Safari/537.36");
+    }
+
+    public static String send(String url, String params, Map<String , String> header, String method) {
         String result=null;
         HttpURLConnection conn=null;
         try {
@@ -109,20 +65,13 @@ public class PNGetPostUtil {
             conn = (HttpURLConnection) realUrl.openConnection();
             conn.setConnectTimeout(10000);
             conn.setReadTimeout(20000);
-            conn.setRequestMethod("POST");
+            conn.setRequestMethod(method);
             conn.setUseCaches(false);
             conn.setDoOutput(true);
             conn.setDoInput(true);
 
             // 设置通用的请求属性
-            conn.setRequestProperty("accept", "*/*");
-            conn.setRequestProperty("connection", "Keep-Alive");
-            conn.setRequestProperty("Accept-Encoding", "gzip, deflate, br");
-//            conn.setRequestProperty("Accept-Language",
-//                    "zh-CN,zh;q=0.8,zh-TW;q=0.7,zh-HK;q=0.5,en-US;q=0.3,en;q=0.2");
-//            conn.setRequestProperty("user-agent",
-//                    "Mozilla/5.0 (X11; Ubuntu; Linux x86_64; rv:57.0) Gecko/20100101 Firefox/57.0");
-            // 发送POST请求必须设置如下两行
+//            handleConn(conn);
 
             if (header!=null)
             {
@@ -174,7 +123,7 @@ public class PNGetPostUtil {
         {
             outputStream.write(arr, 0, len);
         }
-        bytes=outputStream.toString("UTF-8");
+        bytes=outputStream.toString();
         outputStream.flush();
         outputStream.close();
         is.close();
