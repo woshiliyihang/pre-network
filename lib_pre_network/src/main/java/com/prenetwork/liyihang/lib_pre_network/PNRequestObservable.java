@@ -11,11 +11,20 @@ import java.util.concurrent.Executors;
 
 public abstract class PNRequestObservable extends Observable implements PNRequestInterface {
 
-    protected String result;
+    private String result;
+    private boolean isEnd=false;
     protected static ExecutorService executor= Executors.newFixedThreadPool(3);
+
+    public void requestEnd() {
+        isEnd = true;
+    }
 
     public String getResult() {
         return result;
+    }
+
+    public void setResult(String result) {
+        this.result = result;
     }
 
     public String getRequestMethod() {
@@ -25,7 +34,7 @@ public abstract class PNRequestObservable extends Observable implements PNReques
     @Override
     public synchronized void addObserver(Observer o) {
         super.addObserver(o);
-        if (result!=null)
+        if (isEnd)
         {
             dataChange();
         }
@@ -33,6 +42,7 @@ public abstract class PNRequestObservable extends Observable implements PNReques
 
     @Override
     public void handlerRequest() {
+        isEnd=false;
         executor.submit(new Runnable() {
             @Override
             public void run() {
@@ -42,9 +52,16 @@ public abstract class PNRequestObservable extends Observable implements PNReques
                 if ("POST".equals(getRequestMethod()))
                     result = PNGetPostUtil.sendPost(getRequestUrl(), getRequestParms(), getRequestHeader());
 
+                requestEnd();
                 dataChange();
             }
         });
+    }
+
+    protected void requestPost(String data){
+        setResult(data);
+        requestEnd();
+        dataChange();
     }
 
     protected void dataChange(){

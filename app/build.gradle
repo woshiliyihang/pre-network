@@ -26,4 +26,6 @@ dependencies {
     androidTestImplementation 'com.android.support.test:runner:1.0.1'
     androidTestImplementation 'com.android.support.test.espresso:espresso-core:3.0.1'
     implementation project(':lib_pre_network')
+    implementation 'com.squareup.okhttp:okhttp:2.4.0'
+//    implementation 'com.liyihang:pre-network:1.0.1'
 }

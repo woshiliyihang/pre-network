@@ -40,6 +40,8 @@ public class PreNetworkHelper {
         {
             objs.put(requestObservable.getId(), requestObservable);
             requestObservable.handlerRequest();
+        }else {
+            PNUtils.msg("Observable is exist !!");
         }
         return this;
     }
@@ -49,6 +51,8 @@ public class PreNetworkHelper {
         if (ro!=null)
         {
             ro.addObserver(observer);
+        }else {
+            PNUtils.msg("Observable is null !!");
         }
         return this;
     }

@@ -15,6 +15,7 @@ import android.text.TextUtils;
 import android.text.TextWatcher;
 import android.util.Base64;
 import android.util.DisplayMetrics;
+import android.util.Log;
 import android.view.View;
 import android.view.WindowManager;
 import android.widget.EditText;
@@ -389,6 +390,10 @@ public class PNUtils {
                 }
             }
         }
+    }
+
+    public static void msg( String msg){
+        Log.i("pre-network", msg);
     }
 
 }

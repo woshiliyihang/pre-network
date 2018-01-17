@@ -7,8 +7,11 @@ import android.view.View;
 import android.widget.Button;
 
 import com.prenetwork.liyihang.lib_pre_network.PNBaseActivity;
+import com.prenetwork.liyihang.lib_pre_network.PNObserver;
 import com.prenetwork.liyihang.lib_pre_network.PNQuickRequest;
+import com.prenetwork.liyihang.lib_pre_network.PNRequestObservable;
 import com.prenetwork.liyihang.lib_pre_network.PNRouterManager;
+import com.prenetwork.liyihang.lib_pre_network.PNUtils;
 import com.prenetwork.liyihang.lib_pre_network.PreNetworkHelper;
 
 public class MainActivity extends PNBaseActivity implements View.OnClickListener {
@@ -22,6 +25,23 @@ public class MainActivity extends PNBaseActivity implements View.OnClickListener
 
         mclick=findViewById(R.id.mclick);
         mclick.setOnClickListener(this);
+
+        PreNetworkHelper.getInstance()
+                .removeAllObservable()
+                .addRequestObservable(new MyRequestObservable())
+                .addObserver(new PNObserver() {
+                    @Override
+                    public void call(PNRequestObservable observable) {
+                        MyRequestObservable result= (MyRequestObservable) observable;
+                        PNUtils.msg("end:"+result.getResult());
+                    }
+
+                    @Override
+                    public String getId() {
+                        return "request_id";
+                    }
+                })
+                .removeAllObservable();
 
     }
 
