@@ -8,6 +8,7 @@ import android.widget.TextView;
 
 import com.prenetwork.liyihang.lib_pre_network.PNObserver;
 import com.prenetwork.liyihang.lib_pre_network.PNRequestObservable;
+import com.prenetwork.liyihang.lib_pre_network.PNRouterManager;
 import com.prenetwork.liyihang.lib_pre_network.PreNetworkHelper;
 
 /**
@@ -39,5 +40,12 @@ public class OtherActivity extends AppCompatActivity{
                 return "web_data";
             }
         }).removeRequestObservable("web_data");
+    }
+
+    @Override
+    public void onBackPressed() {
+        PNRouterManager.getInstance().getTopRouter().back(this);
+        super.onBackPressed();
+
     }
 }

@@ -18,7 +18,13 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name=".OtherActivity"/>
+        <activity android:name=".OtherActivity">
+            <intent-filter>
+                <action android:name="android.intent.action.VIEW"/>
+                <category android:name="android.intent.category.DEFAULT"/>
+                <data android:host="sijienet.com" android:scheme="app" android:path="/other"/>
+            </intent-filter>
+        </activity>
     </application>
 
 </manifest>
