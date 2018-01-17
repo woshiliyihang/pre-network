@@ -20,6 +20,13 @@ public class PNQuickRequest extends PNRequestObservable {
         header=null;
     }
 
+    public PNQuickRequest(String id, String url, String parms) {
+        this.id = id;
+        this.url = url;
+        this.parms = parms;
+        header=null;
+    }
+
     public PNQuickRequest(String id, String url, String parms, Map<String, String> header) {
         this.id = id;
         this.url = url;
@@ -46,4 +53,5 @@ public class PNQuickRequest extends PNRequestObservable {
     public String getRequestUrl() {
         return url;
     }
+
 }

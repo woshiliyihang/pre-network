@@ -50,10 +50,10 @@ public class PNGetPostUtil {
             conn.setRequestProperty("accept", "*/*");
             conn.setRequestProperty("connection", "Keep-Alive");
             conn.setRequestProperty("Accept-Encoding", "gzip, deflate, br");
-            conn.setRequestProperty("Accept-Language",
-                    "zh-CN,zh;q=0.8,zh-TW;q=0.7,zh-HK;q=0.5,en-US;q=0.3,en;q=0.2");
-            conn.setRequestProperty("user-agent",
-                    "Mozilla/5.0 (X11; Ubuntu; Linux x86_64; rv:57.0) Gecko/20100101 Firefox/57.0");
+//            conn.setRequestProperty("Accept-Language",
+//                    "zh-CN,zh;q=0.8,zh-TW;q=0.7,zh-HK;q=0.5,en-US;q=0.3,en;q=0.2");
+//            conn.setRequestProperty("user-agent",
+//                    "Mozilla/5.0 (X11; Ubuntu; Linux x86_64; rv:57.0) Gecko/20100101 Firefox/57.0");
 
             if (header!=null)
             {
@@ -118,10 +118,10 @@ public class PNGetPostUtil {
             conn.setRequestProperty("accept", "*/*");
             conn.setRequestProperty("connection", "Keep-Alive");
             conn.setRequestProperty("Accept-Encoding", "gzip, deflate, br");
-            conn.setRequestProperty("Accept-Language",
-                    "zh-CN,zh;q=0.8,zh-TW;q=0.7,zh-HK;q=0.5,en-US;q=0.3,en;q=0.2");
-            conn.setRequestProperty("user-agent",
-                    "Mozilla/5.0 (X11; Ubuntu; Linux x86_64; rv:57.0) Gecko/20100101 Firefox/57.0");
+//            conn.setRequestProperty("Accept-Language",
+//                    "zh-CN,zh;q=0.8,zh-TW;q=0.7,zh-HK;q=0.5,en-US;q=0.3,en;q=0.2");
+//            conn.setRequestProperty("user-agent",
+//                    "Mozilla/5.0 (X11; Ubuntu; Linux x86_64; rv:57.0) Gecko/20100101 Firefox/57.0");
             // 发送POST请求必须设置如下两行
 
             if (header!=null)
