@@ -30,7 +30,6 @@ public class OtherActivity extends AppCompatActivity{
                         textView.setText(result);
                         scrollView.addView(textView);
                         setContentView(scrollView);
-                        PreNetworkHelper.getInstance().removeAllObservable();
                     }
                 });
             }

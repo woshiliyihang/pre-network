@@ -23,6 +23,8 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         mclick=findViewById(R.id.mclick);
         mclick.setOnClickListener(this);
 
+        PreNetworkHelper.getInstance().removeAllObservable();
+
     }
 
 
@@ -30,8 +32,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     public void onClick(View view) {
         Log.i(getClass().getSimpleName(), "click");
         PreNetworkHelper.getInstance()
-                .removeAllObservable()
-                .addRequestObservable(new PNQuickRequest("web_data", "http://sijienet.com"));
+                .addRequestObservable(new PNQuickRequest("web_data", "http://baidu.com/"));
         startActivity(new Intent(this, OtherActivity.class));
     }
 }
