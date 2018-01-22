@@ -39,7 +39,7 @@ publish {
     userOrg = 'mhhyoucom'//bintray.com用户名
     groupId = 'com.liyihang'//jcenter上的路径
     artifactId = 'pre-network'//项目名称
-    publishVersion = '1.2.2'//版本号
-    desc = '网络预加载框架，前置网络加载框架'//描述，不重要
+    publishVersion = '1.2.3'//版本号
+    desc = 'Android network preloading framework, network optimization framework : pre-network'//描述，不重要
     website = 'https://github.com/woshiliyihang/pre-network'//网站，不重要；尽量模拟github上的地址，例如我这样的；当然你有地址最好了
 }

@@ -1,13 +1,23 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
+    android:orientation="vertical"
+    android:gravity="center"
     android:layout_height="match_parent">
 
     <Button
         android:id="@+id/mclick"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
+        android:layout_marginTop="10dp"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
         android:text="点击开始网络预加载，跳转页面" />
+
+    <Button
+        android:id="@+id/version"
+        android:layout_marginTop="10dp"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="获取版本" />
 
 
 </LinearLayout>

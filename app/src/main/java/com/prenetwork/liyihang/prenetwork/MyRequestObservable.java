@@ -41,7 +41,7 @@ public class MyRequestObservable extends PNRequestObservable {
     public void handlerRequest() {
 //        super.handlerRequest(); 将原来网络请求处理方法关闭
         Request.Builder builder=new Request.Builder();
-        builder.url("https://www.baidu.com/");
+        builder.url("http://blog.csdn.net/mhhyoucom");
         HTTP_CLIENT.newCall(builder.build()).enqueue(new Callback() {
             @Override
             public void onFailure(Request request, IOException e) {

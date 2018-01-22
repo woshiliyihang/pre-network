@@ -396,4 +396,8 @@ public class PNUtils {
         Log.i("pre-network", msg);
     }
 
+    public static String getVersion(){
+        return "1.2.3";
+    }
+
 }

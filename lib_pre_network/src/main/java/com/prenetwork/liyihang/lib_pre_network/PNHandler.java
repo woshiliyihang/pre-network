@@ -18,6 +18,15 @@ public class PNHandler extends Handler {
 	
 	public PNHandler() {
 		super();
+		init();
+	}
+
+	public PNHandler(Callback callback){
+		super(callback);
+		init();
+	}
+
+	private void init(){
 		isStop = false;
 	}
 	
