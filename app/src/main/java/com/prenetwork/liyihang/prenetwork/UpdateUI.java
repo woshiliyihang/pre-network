@@ -1,7 +1,5 @@
 package com.prenetwork.liyihang.prenetwork;
 
-import android.widget.Toast;
-
 import com.prenetwork.liyihang.lib_pre_network.PNHandler;
 import com.prenetwork.liyihang.lib_pre_network.PNHandlerObserver;
 import com.prenetwork.liyihang.lib_pre_network.PNRequestObservable;
