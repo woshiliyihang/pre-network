@@ -50,6 +50,8 @@ public class MainActivity extends PNBaseActivity implements View.OnClickListener
                 .addObserver(new UpdateUI(handler))
                 .removeAllObservable();
 
+
+
     }
 
     @Override
