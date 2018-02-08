@@ -96,7 +96,7 @@ public class MainActivity extends PNBaseActivity implements View.OnClickListener
 
     @Override
     public boolean handleMessage(Message message) {
-        Toast.makeText(this, "init end", Toast.LENGTH_SHORT).show();
+        Toast.makeText(this, "init end"+PNUtils.getVersion(), Toast.LENGTH_SHORT).show();
         return false;
     }
 }
