@@ -3,11 +3,8 @@
   <component name="ProjectModuleManager">
     <modules>
       <module fileurl="file://$PROJECT_DIR$/app/app.iml" filepath="$PROJECT_DIR$/app/app.iml" />
-      <module fileurl="file://F:\gitworkspace\pre-network\app\app.iml" filepath="F:\gitworkspace\pre-network\app\app.iml" />
       <module fileurl="file://$PROJECT_DIR$/lib_pre_network/lib_pre_network.iml" filepath="$PROJECT_DIR$/lib_pre_network/lib_pre_network.iml" />
-      <module fileurl="file://F:\gitworkspace\pre-network\lib_pre_network\lib_pre_network.iml" filepath="F:\gitworkspace\pre-network\lib_pre_network\lib_pre_network.iml" />
       <module fileurl="file://$PROJECT_DIR$/pre-network.iml" filepath="$PROJECT_DIR$/pre-network.iml" />
-      <module fileurl="file://F:\gitworkspace\pre-network\pre-network.iml" filepath="F:\gitworkspace\pre-network\pre-network.iml" />
     </modules>
   </component>
 </project>
