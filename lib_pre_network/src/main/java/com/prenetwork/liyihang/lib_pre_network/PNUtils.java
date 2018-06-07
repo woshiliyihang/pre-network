@@ -38,9 +38,6 @@ import java.util.regex.Pattern;
 
 public class PNUtils {
 
-    public static String getVersion(){
-        return "1.2.6";
-    }
 
     /**
      * 时间转换
