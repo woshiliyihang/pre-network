@@ -1,45 +1,46 @@
 package com.prenetwork.liyihang.prenetwork;
 
 import android.os.Bundle;
+import android.os.Message;
 import android.support.annotation.Nullable;
-import android.support.v7.app.AppCompatActivity;
-import android.widget.ScrollView;
-import android.widget.TextView;
+import android.text.Html;
+import android.widget.Button;
 
-import com.prenetwork.liyihang.lib_pre_network.PNObserver;
-import com.prenetwork.liyihang.lib_pre_network.PNRequestObservable;
+import com.prenetwork.liyihang.lib_pre_network.PNBaseActivity;
 import com.prenetwork.liyihang.lib_pre_network.PNRouterManager;
+import com.prenetwork.liyihang.lib_pre_network.PNViewFind;
 import com.prenetwork.liyihang.lib_pre_network.PreNetworkHelper;
 
 /**
  * Created by liyihang on 18-1-16.
  */
 
-public class OtherActivity extends AppCompatActivity{
+public class OtherActivity extends PNBaseActivity{
+
+    @PNViewFind
+    Button mclick;
+
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        PreNetworkHelper.getInstance().addObserver(new PNObserver() {
-            @Override
-            public void call(PNRequestObservable observable) {
-                final String result = observable.getResult();
-                runOnUiThread(new Runnable() {
-                    @Override
-                    public void run() {
-                        ScrollView scrollView=new ScrollView(OtherActivity.this);
-                        TextView textView=new TextView(OtherActivity.this);
-                        textView.setText(result);
-                        scrollView.addView(textView);
-                        setContentView(scrollView);
-                    }
-                });
-            }
+        setContentView(R.layout.activity_main);
 
-            @Override
-            public String getId() {
-                return "web_data";
-            }
-        }).removeRequestObservable("web_data");
+        PNViewFind.Bind.init(this);
+        initView();
+    }
+
+    @Override
+    public Object getClassName() {
+        return new MainBasePresenter();
+    }
+
+    @Override
+    public void update(Message message) {
+
+    }
+
+    private void initView() {
+        PreNetworkHelper.getInstance().addObserver(new UpdateUI(this));
     }
 
     @Override
@@ -47,5 +48,14 @@ public class OtherActivity extends AppCompatActivity{
         PNRouterManager.getInstance().getTopRouter().back(this);
         super.onBackPressed();
 
+    }
+
+    @Override
+    public void replyMessage(Message msg) {
+        if (msg.what==10)
+        {
+            String d= (String) msg.obj;
+            mclick.setText(Html.fromHtml(d));
+        }
     }
 }

@@ -7,10 +7,7 @@ import android.util.Log;
 
 import java.util.Observable;
 
-/**
- * 作者： 李一航
- * 时间： 17-8-30.
- */
+
 
 public abstract class PNBasePresenter extends Observable implements PNMvpInterface, Handler.Callback, PNReplyMessageInterface, PNBaseActivity.OnGetReplyMsgListener {
 

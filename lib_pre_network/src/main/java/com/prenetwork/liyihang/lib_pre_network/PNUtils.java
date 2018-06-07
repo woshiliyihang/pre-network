@@ -1,5 +1,6 @@
 package com.prenetwork.liyihang.lib_pre_network;
 
+import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
@@ -39,9 +40,7 @@ import java.util.regex.Pattern;
 public class PNUtils {
 
 
-    /**
-     * 时间转换
-     */
+
     public static long[] getRemainingTime(long sysTime){
         long m = 1000L;
         long s = 60 * 1000L;
@@ -60,9 +59,7 @@ public class PNUtils {
         return outs;
     }
 
-    /**
-     * 2 转 02
-     */
+
     public static String numAddZero(int nums){
         if (nums>=10) {
             return nums + "";
@@ -71,14 +68,12 @@ public class PNUtils {
         }
     }
 
-    /**
-     * 人性化时间转换
-     */
+
     public static String changeToPPTime(long targetTime) {
         String outString = null;
         try {
-            SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy年MM月");
-            SimpleDateFormat simpleDateFormat2 = new SimpleDateFormat("MM月dd日");
+            @SuppressLint("SimpleDateFormat") SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM");
+            @SuppressLint("SimpleDateFormat") SimpleDateFormat simpleDateFormat2 = new SimpleDateFormat("MM-dd");
             long sysTime = System.currentTimeMillis() - targetTime;
             long s = 60 * 1000L;
             long h = 60 * 60 * 1000L;
@@ -96,13 +91,13 @@ public class PNUtils {
             } else if (sysY == 0 && sysH >= 1) {
                 outString = simpleDateFormat2.format(new Date(targetTime));
             } else if (sysH == 0 && sysd >= 1) {
-                outString = sysd + "天前";
+                outString = sysd + " day";
             } else if (sysd == 0 && sysh >= 1) {
-                outString = sysh + "小时前";
+                outString = sysh + " hour";
             } else if (sysh == 0 && sysS >= 1) {
-                outString = sysS + "分钟前";
+                outString = sysS + "minute";
             } else {
-                outString = "刚刚发布";
+                outString = " now";
             }
         } catch (Exception e) {
             e.printStackTrace();
@@ -110,9 +105,7 @@ public class PNUtils {
         return outString;
     }
 
-    /**
-     * 快速组合json对象
-     */
+
     public static String mergeParm(String... arrStrings){
         String outString=null;
         try {
@@ -132,9 +125,7 @@ public class PNUtils {
         return outString;
     }
 
-    /**
-     * 组合数组元素
-     */
+
     public static String  mergeStringArr(String[] arr, String fg){
         if (arr==null || arr.length==0){
             return "";
@@ -151,9 +142,7 @@ public class PNUtils {
         return  outs;
     }
 
-    /**
-     * 获取屏幕参数
-     */
+
     public static DisplayMetrics getScreenSize(Context context){
         DisplayMetrics dm = new DisplayMetrics();
         WindowManager windowManager=(WindowManager)context.getSystemService(Context.WINDOW_SERVICE);
@@ -161,32 +150,24 @@ public class PNUtils {
         return dm;
     }
 
-    /**
-     * 根据手机的分辨率从 dp 的单位 转成为 px(像素)
-     */
+
     public static int dp2px(Context context, float dpValue) {
         final float scale = context.getResources().getDisplayMetrics().density;
         return (int) (dpValue * scale + 0.5f);
     }
 
-    /**
-     * 根据手机的分辨率从 px(像素) 的单位 转成为 dp
-     */
+
     public static int px2dip(Context context, float pxValue) {
         final float scale = context.getResources().getDisplayMetrics().density;
         return (int) (pxValue / scale + 0.5f);
     }
 
-    /**
-     * 默认值函数
-     */
+
     public static String defaultValue(String value, String defaultVal){
         return ( value!=null && !TextUtils.equals(value,"") ) ? value : defaultVal;
     }
 
-    /**
-     * 删除输入款方法
-     */
+
     public static class BindTextClear implements View.OnFocusChangeListener, TextWatcher {
 
         private EditText editText;
@@ -253,9 +234,7 @@ public class PNUtils {
         }
     }
 
-    /**
-     * 图片转string
-     */
+
     public static String BitmapToString(Bitmap bitmap){
         String outs=null;
         try {
@@ -270,9 +249,7 @@ public class PNUtils {
         return outs;
     }
 
-    /**
-     * 打开意图拍照
-     */
+
     public static File openCamera(Activity context, int actionId){
         SimpleDateFormat format = new SimpleDateFormat("yyyyMMddHHmmss");
         Date date = new Date(System.currentTimeMillis());
@@ -302,9 +279,7 @@ public class PNUtils {
         return inSampleSize;
     }
 
-    /**
-     * 压缩图片
-     */
+
     public static Bitmap decodeSampledBitmapFromResource(String pathName, int reqWidth) {
         final BitmapFactory.Options options = new BitmapFactory.Options();
         options.inJustDecodeBounds = true;
@@ -314,18 +289,14 @@ public class PNUtils {
         return BitmapFactory.decodeFile(pathName, options);
     }
 
-    /**
-     * 身份证
-     */
+
     public static boolean isIdCard(String idCard){
         idCard = idCard.toLowerCase();
         String REGEX_ID_CARD = "(^\\d{15}$)|(^\\d{17}([0-9]|x)$)";
         return Pattern.matches(REGEX_ID_CARD, idCard);
     }
 
-    /**
-     * 隐藏姓名中间一位
-     */
+
     public static String hideNameMiddle(String name){
         try {
             String pre= name.substring(0,1);
@@ -340,9 +311,7 @@ public class PNUtils {
         return name;
     }
 
-    /**
-     * 隐藏身份证中间位数
-     */
+
     public static String hideIdCardMiddle(String idcard){
         try {
             String pre = idcard.substring(0,4);
@@ -358,9 +327,7 @@ public class PNUtils {
         return idcard;
     }
 
-    /**
-     * 输出过滤后html内容
-     */
+
     public static Spanned getStringByHtml(String html){
         Spanned outs=null;
         try {
@@ -371,9 +338,6 @@ public class PNUtils {
         return outs;
     }
 
-    /**
-     * 打印在文件中
-     */
     public static void saveFile(String json) {
         FileOutputStream fileOutputStream = null;
         try {

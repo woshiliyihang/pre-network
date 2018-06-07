@@ -2,51 +2,34 @@ package com.prenetwork.liyihang.lib_pre_network;
 
 import android.util.Log;
 
-import java.io.BufferedInputStream;
-import java.io.BufferedOutputStream;
-import java.io.BufferedReader;
-import java.io.ByteArrayOutputStream;
-import java.io.IOException;
 import java.io.InputStream;
-import java.io.InputStreamReader;
-import java.io.PrintWriter;
+import java.io.OutputStreamWriter;
 import java.net.HttpURLConnection;
 import java.net.URL;
-import java.net.URLConnection;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
-import java.util.concurrent.ExecutorService;
 
 /**
  * Created by liyihang on 18-1-16.
  */
 
 public class PNGetPostUtil {
-    /**
-     * 向指定URL发送GET方法的请求
-     *
-     * @param url    发送请求的URL
-     * @param params 请求参数，请求参数应该是name1=value1&name2=value2的形式。
-     * @return URL所代表远程资源的响应
-     */
+
     public static String sendGet(String url, String params, Map<String , String> header) {
         return send(url, params, header, "GET");
     }
 
-    /**
-     * 向指定URL发送POST方法的请求
-     *
-     * @param url    发送请求的URL
-     * @param params 请求参数，请求参数应该是name1=value1&name2=value2的形式。
-     * @return URL所代表远程资源的响应
-     */
+
     public static String sendPost(String url, String params, Map<String , String> header) {
         return send(url, params, header, "POST");
     }
 
+
     private static void handleConn(HttpURLConnection conn) {
+        conn.setRequestProperty("Content-type", "text/html");
+        conn.setRequestProperty("Accept-Charset", "utf-8");
         conn.setRequestProperty("accept", "*/*");
         conn.setRequestProperty("connection", "Keep-Alive");
         conn.setRequestProperty("Accept-Encoding", "gzip, deflate");
@@ -54,6 +37,7 @@ public class PNGetPostUtil {
                 "zh-CN,zh;q=0.8,zh-TW;q=0.7,zh-HK;q=0.5,en-US;q=0.3,en;q=0.2");
         conn.setRequestProperty("user-agent",
                 "Mozilla/5.0 (Linux; Android 7.0; PLUS Build/NRD90M) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/61.0.3163.98 Mobile Safari/537.36");
+        conn.setRequestProperty("Content-Type", "application/x-www-form-urlencoded");
     }
 
     public static String send(String url, String params, Map<String , String> header, String method) {
@@ -61,16 +45,14 @@ public class PNGetPostUtil {
         HttpURLConnection conn=null;
         try {
             URL realUrl = new URL(url);
-            // 打开和URL之间的连接
             conn = (HttpURLConnection) realUrl.openConnection();
-//            conn.setConnectTimeout(10000);
-//            conn.setReadTimeout(20000);
+            conn.setConnectTimeout(10000);
+            conn.setReadTimeout(10000);
+            conn.setUseCaches(false);
             conn.setRequestMethod(method);
-//            conn.setUseCaches(false);
             conn.setDoOutput(true);
             conn.setDoInput(true);
 
-            // 设置通用的请求属性
 //            handleConn(conn);
 
             if (header!=null)
@@ -81,28 +63,23 @@ public class PNGetPostUtil {
                 }
             }
 
+            conn.connect();
+
             if (params!=null)
             {
-                // 获取URLConnection对象对应的输出流
-                PrintWriter out = new PrintWriter(conn.getOutputStream());
-                // 发送请求参数
-                out.print(params);
-                // flush输出流的缓冲
+                OutputStreamWriter out = new OutputStreamWriter(conn.getOutputStream(), "utf-8");
+                out.write(params);
                 out.flush();
                 out.close();
             }
 
-            // 定义BufferedReader输入流来读取URL的响应
-            if (conn.getResponseCode()==200
-                    || conn.getResponseCode() == 302
-                    || conn.getResponseCode() == 301){
-                result = getBytesByInputStream(conn.getInputStream());
-            }
+            int responseCode = conn.getResponseCode();
+            Log.i("url_connection","send response code =:" + responseCode);
+            result = getBytesByInputStream(conn.getInputStream());
         } catch (Exception e) {
-            Log.i("url_connection","发送GET请求出现异常！" + e.getMessage());
+            Log.i("url_connection","send get error:" + e.getMessage());
             e.printStackTrace();
         }
-        // 使用finally块来关闭输出流、输入流
         finally {
             if (conn!=null)
             {
@@ -113,25 +90,19 @@ public class PNGetPostUtil {
     }
 
 
-    //从InputStream中读取数据，转换成byte数组，最后关闭InputStream
     public static String getBytesByInputStream(InputStream is) throws Exception {
-        String bytes;
-        ByteArrayOutputStream outputStream=new ByteArrayOutputStream();
+        StringBuilder outs= new StringBuilder();
         int len=-1;
         byte[] arr=new byte[1024];
         while ( (len=is.read(arr))!=-1 )
         {
-            outputStream.write(arr, 0, len);
+            outs.append(new String(arr, 0, len));
         }
-        bytes=outputStream.toString();
-        outputStream.flush();
-        outputStream.close();
         is.close();
-        return bytes;
+        return outs.toString();
     }
 
 
-    //读取响应头
     public static String getResponseHeader(HttpURLConnection conn) {
         Map<String, List<String>> responseHeaderMap = conn.getHeaderFields();
         int size = responseHeaderMap.size();
@@ -147,9 +118,7 @@ public class PNGetPostUtil {
         return sbResponseHeader.toString();
     }
 
-    //读取请求头
     public static String getReqeustHeader(HttpURLConnection conn) {
-        //https://github.com/square/okhttp/blob/master/okhttp-urlconnection/src/main/java/okhttp3/internal/huc/HttpURLConnectionImpl.java#L236
         Map<String, List<String>> requestHeaderMap = conn.getRequestProperties();
         Iterator<String> requestHeaderIterator = requestHeaderMap.keySet().iterator();
         StringBuilder sbRequestHeader = new StringBuilder();

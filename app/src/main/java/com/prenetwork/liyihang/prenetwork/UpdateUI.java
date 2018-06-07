@@ -1,34 +1,37 @@
 package com.prenetwork.liyihang.prenetwork;
 
-import com.prenetwork.liyihang.lib_pre_network.PNHandler;
-import com.prenetwork.liyihang.lib_pre_network.PNHandlerObserver;
+import android.widget.Toast;
+
+import com.prenetwork.liyihang.lib_pre_network.PNBaseActivity;
+import com.prenetwork.liyihang.lib_pre_network.PNObserver;
 import com.prenetwork.liyihang.lib_pre_network.PNRequestObservable;
-import com.prenetwork.liyihang.lib_pre_network.PNUtils;
+import com.prenetwork.liyihang.lib_pre_network.PreNetworkHelper;
 
-/**
- * Created by liyihang on 18-1-22.
- */
+import java.lang.ref.WeakReference;
 
-public class UpdateUI extends PNHandlerObserver {
-    public UpdateUI(PNHandler handler) {
-        super(handler);
+public class UpdateUI extends PNObserver {
+
+    private WeakReference<OtherActivity> activity;
+
+    public UpdateUI(OtherActivity activity) {
+        this.activity = new WeakReference<>(activity);
+    }
+
+    @Override
+    public void call(final PNRequestObservable observable) {
+        // del request observable
+        PreNetworkHelper.getInstance().removeRequestObservable(MainActivity.url_id_only);
+        if (activity.get()==null)
+            return;
+        if (observable!=null) {
+            activity.get().sendStateSelf(PNBaseActivity.getMsgObj(10, observable.getResult()));
+        }else {
+            Toast.makeText(activity.get(), "网络错误", Toast.LENGTH_LONG).show();
+        }
     }
 
     @Override
     public String getId() {
-        return "request_id";
-    }
-
-    @Override
-    public void preHandler(PNRequestObservable observable) {
-        // TODO: 18-1-22 handler data
-    }
-
-    @Override
-    public void lastHandlerInUIThread(PNRequestObservable observable) {
-        //处理 ui动作
-        MyRequestObservable result= (MyRequestObservable) observable;
-        PNUtils.msg("end:"+result.getResult());
-        handler.sendEmptyMessage(10);
+        return MainActivity.url_id_only;
     }
 }

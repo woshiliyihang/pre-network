@@ -28,7 +28,7 @@ public abstract class PNRequestObservable extends Observable implements PNReques
     }
 
     public String getRequestMethod() {
-        return "POST";
+        return "GET";
     }
 
     @Override

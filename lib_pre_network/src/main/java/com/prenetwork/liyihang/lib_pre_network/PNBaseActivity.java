@@ -11,8 +11,7 @@ import java.util.Observable;
 import java.util.Observer;
 
 /**
- * 作者： 李一航
- * 时间： 17-8-30.
+ *  liyihang
  */
 
 public abstract class PNBaseActivity extends AppCompatActivity implements PNReplyMessageInterface, Observer {

@@ -1,3 +1,5 @@
 <resources>
     <string name="app_name">PreNetwork</string>
+    <string name="other">other</string>
+    <string name="intro">点击开始网络预加载，跳转页面</string>
 </resources>

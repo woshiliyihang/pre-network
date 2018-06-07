@@ -4,13 +4,7 @@ import android.os.Handler;
 import android.os.Message;
 
 
-/**
- * 
- * 
- * handler 控制类
- * @author user
- *
- */
+
 public class PNHandler extends Handler {
 
 	
@@ -46,7 +40,6 @@ public class PNHandler extends Handler {
 	
 	@Override
 	public void dispatchMessage(Message msg) {
-		// TODO Auto-generated method stub
 		if (isStop) {
 			return;
 		}
@@ -55,7 +48,6 @@ public class PNHandler extends Handler {
 
 	@Override
 	public boolean sendMessageAtTime(Message msg, long uptimeMillis) {
-		// TODO Auto-generated method stub
 		if (isStop) {
 			return false;
 		}
@@ -64,7 +56,6 @@ public class PNHandler extends Handler {
 
 	@Override
 	public void handleMessage(Message msg) {
-		// TODO Auto-generated method stub
 		if (isStop) {
 			return;
 		}
