@@ -44,6 +44,11 @@ public class PNQuickRequest extends PNRequestObservable {
     }
 
     @Override
+    public void handlerRequest() {
+        super.handlerRequest();// you can delete old logic handle, use your new network framework and logic
+    }
+
+    @Override
     public String getRequestMethod() {
         return method!=null ? method : super.getRequestMethod();
     }
