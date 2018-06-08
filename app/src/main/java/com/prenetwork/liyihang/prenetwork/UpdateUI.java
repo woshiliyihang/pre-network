@@ -33,7 +33,7 @@ public class UpdateUI extends PNBaseObserver {
 
     @Override
     public void error(String err) {
-        Toast.makeText(activity.get(), "网络错误", Toast.LENGTH_LONG).show();
+        Toast.makeText(activity.get(), err, Toast.LENGTH_LONG).show();
     }
 
     @Override

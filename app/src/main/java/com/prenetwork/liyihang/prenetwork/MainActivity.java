@@ -8,6 +8,7 @@ import android.widget.Button;
 import com.prenetwork.liyihang.lib_pre_network.PNBaseActivity;
 import com.prenetwork.liyihang.lib_pre_network.PNClickBindCompat;
 import com.prenetwork.liyihang.lib_pre_network.PNQuickRequest;
+import com.prenetwork.liyihang.lib_pre_network.PNRouter;
 import com.prenetwork.liyihang.lib_pre_network.PNRouterManager;
 import com.prenetwork.liyihang.lib_pre_network.PNViewFind;
 import com.prenetwork.liyihang.lib_pre_network.PreNetworkHelper;
@@ -57,7 +58,11 @@ public class MainActivity extends PNBaseActivity implements View.OnClickListener
         // plase use your self network framework ， here is Simple network util
         PreNetworkHelper.getInstance().addRequestObservable(new PNQuickRequest(url_id_only, "https://blog.csdn.net/mhhyoucom/",null, null, "GET"));
 
-        PNRouterManager.getInstance().createRouter(this.toString()).getTopRouter().jump(this, "app://sijienet.com/other", null);
+        if (PNRouterManager.getInstance().getTopRouter()==null)
+        {
+            PNRouterManager.getInstance().createRouter(System.currentTimeMillis()+"");
+        }
+        PNRouterManager.getInstance().getTopRouter().jump(this, "app://sijienet.com/other", null);
     }
 
 }
