@@ -17,6 +17,16 @@ import java.util.Set;
 
 public class PNGetPostUtil {
 
+    public static final String ERROR_PRE="ERROR_PRE====";
+
+    public static String isError(String res){
+        if (res!=null && res.contains(ERROR_PRE))
+        {
+            return res.replace(ERROR_PRE, "");
+        }
+        return null;
+    }
+
     public static String sendGet(String url, String params, Map<String , String> header) {
         return send(url, params, header, "GET");
     }
@@ -75,9 +85,15 @@ public class PNGetPostUtil {
 
             int responseCode = conn.getResponseCode();
             Log.i("url_connection","send response code =:" + responseCode);
-            result = getBytesByInputStream(conn.getInputStream());
+            if (responseCode==HttpURLConnection.HTTP_OK)
+            {
+                result = getBytesByInputStream(conn.getInputStream());
+            }else {
+                result=ERROR_PRE+"network error !! please checking your phone network , error code=="+responseCode+"; error message=="+conn.getResponseMessage();
+            }
         } catch (Exception e) {
             Log.i("url_connection","send get error:" + e.getMessage());
+            result=ERROR_PRE+e.getMessage();
             e.printStackTrace();
         }
         finally {

@@ -40,6 +40,7 @@ public class OtherActivity extends PNBaseActivity{
     }
 
     private void initView() {
+        mclick.setText("loading...");
         PreNetworkHelper.getInstance().addObserver(new UpdateUI(this));
     }
 

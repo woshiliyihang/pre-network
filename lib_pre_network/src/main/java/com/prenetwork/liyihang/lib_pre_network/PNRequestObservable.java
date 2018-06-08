@@ -31,6 +31,14 @@ public abstract class PNRequestObservable extends Observable implements PNReques
         return "GET";
     }
 
+    public void setEnd(boolean end) {
+        isEnd = end;
+    }
+
+    public boolean isEnd() {
+        return isEnd;
+    }
+
     @Override
     public synchronized void addObserver(Observer o) {
         super.addObserver(o);
@@ -47,10 +55,10 @@ public abstract class PNRequestObservable extends Observable implements PNReques
             @Override
             public void run() {
                 if ("GET".equals(getRequestMethod()))
-                    result = PNGetPostUtil.sendGet(getRequestUrl(), getRequestParms(), getRequestHeader());
+                    setResult(PNGetPostUtil.sendGet(getRequestUrl(), getRequestParms(), getRequestHeader()));
 
                 if ("POST".equals(getRequestMethod()))
-                    result = PNGetPostUtil.sendPost(getRequestUrl(), getRequestParms(), getRequestHeader());
+                    setResult(PNGetPostUtil.sendPost(getRequestUrl(), getRequestParms(), getRequestHeader()));
 
                 requestEnd();
                 dataChange();
