@@ -8,7 +8,6 @@ import android.widget.Button;
 import com.prenetwork.liyihang.lib_pre_network.PNBaseActivity;
 import com.prenetwork.liyihang.lib_pre_network.PNClickBindCompat;
 import com.prenetwork.liyihang.lib_pre_network.PNQuickRequest;
-import com.prenetwork.liyihang.lib_pre_network.PNRouter;
 import com.prenetwork.liyihang.lib_pre_network.PNRouterManager;
 import com.prenetwork.liyihang.lib_pre_network.PNViewFind;
 import com.prenetwork.liyihang.lib_pre_network.PreNetworkHelper;

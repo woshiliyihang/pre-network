@@ -1,215 +1,93 @@
-# pre-network 网络预加框架
+# pre-network
 
-网络预加载框架，监听式网络前置加载框架-Network preload, network preload the framework.- pre-network
+#### 项目介绍
+pre-network是一款android网络框架，更加准确的说法是观察者模式预处理器；它主要的特点是预处理网络加载，设计思想是使用观察者模式的订阅式网络框架。
 
-### 框架说明
+#### 软件架构
+基于观察者模式的设计，每个网络请求相当于一个被观察者，每个使用这个网络请求地方只需要添加观察者，就可以获取网络请求数据，每个网络请求必须是唯一的，可以添加多个观察者。
 
-pre-network：是基于观察者模式的网络预先前置加载框架，可以对大程度优化网络加载速度；每一个网络请求相当于被观察者，只要订阅了的观察者能够拿到被观察者的实例。
 
-### 基本使用方法
+#### 安装教程
 
-添加依赖：
+1. 引用依赖
 ```
-implementation 'com.liyihang:pre-network:1.2.2'
-```
-
-每个被观察者网络都必须有一个string 唯一id标识他，观察者订阅也是通过唯一的id来找到被观察者然后订阅。
-这里例如一个被观察者请求的i的是web_data；
-
-首先创建被观察者网络请求；
-代码如下：
-
-```
-PreNetworkHelper.getInstance()
-                    .removeRequestObservable("web_data") // 首先清楚之前的相同id的被观察者请求移除，如果不移除相同id请求没有办法添加进入。
-                    .addRequestObservable(new PNQuickRequest("web_data", "http://baidu.com/"));// 添加被观察者，添加后立即执行网络请求。
+implementation 'com.liyihang:pre-network:1.3.0'
 ```
 
 
-PNQuickRequest是被观察者的一个简单封装；可以看看代码：
 
+#### 使用说明
+
+1. 发起网络请求
+dome当中MainActivity点击跳页按钮打开新activity时候首先执行网络请求，然后执行跳转。
+
+```java
+        Map<String, String> headers=new HashMap<>();
+        headers.put("headerInfo", "test");
+		//第一个参数 是标识网络请求的唯一id，第二个参数是url， 第三个参数是请求参数，第四个参数是请求头部，第五个参数是请求方式。
+        PreNetworkHelper.getInstance().addRequestObservable(new PNQuickRequest(url_id_only, "https://blog.csdn.net/mhhyoucom/","name=liyihang&age=18", headers, "GET"));
 ```
-package com.prenetwork.liyihang.lib_pre_network;
 
-import java.util.Map;
+addRequestObservable 是简单封装唯一网络请求，可以根据项目请求使用自己的网络框架。这样网路请求将立即执行。
 
-/**
- * Created by liyihang on 18-1-16.
- */
 
-public class PNQuickRequest extends PNRequestObservable {
+2. 订阅这个网络请求
+dome中的OtherActivity就是要订阅这个网络请求。使用下面代码订阅：
+```java
+        PreNetworkHelper.getInstance().addObserver(new UpdateUI(this));
+```
 
-    private String id;
-    private String url;
-    private String parms;
-    private Map<String, String> header;
+UpdateUI 就是订阅者；
 
-    public PNQuickRequest(String id, String url) {
-        this.id = id;
-        this.url = url;
-        parms=null;
-        header=null;
+```java
+public class UpdateUI extends PNBaseObserver {
+
+    private WeakReference<OtherActivity> activity;
+
+    public UpdateUI(OtherActivity activity) {
+        this.activity = new WeakReference<>(activity);
     }
 
-    public PNQuickRequest(String id, String url, String parms) {
-        this.id = id;
-        this.url = url;
-        this.parms = parms;
-        header=null;
+    @Override
+    public void pre() {//请求开始前
+        // 删除网络请求被观察者，如果不删除一直保存在内存中
+        PreNetworkHelper.getInstance().removeRequestObservable(MainActivity.url_id_only);
     }
 
-    public PNQuickRequest(String id, String url, String parms, Map<String, String> header) {
-        this.id = id;
-        this.url = url;
-        this.parms = parms;
-        this.header = header;
+    @Override
+    public void result(String res) {//成功处理函数
+        if (activity.get()==null)
+            return;
+        activity.get().sendStateSelf(PNBaseActivity.getMsgObj(10, res));
+    }
+
+    @Override
+    public void error(String err) {//失败处理
+        Toast.makeText(activity.get(), err, Toast.LENGTH_LONG).show();
+    }
+
+    @Override
+    public void end() {// 请求结束后
+
     }
 
     @Override
     public String getId() {
-        return id;
-    }
-
-    @Override
-    public Map<String, String> getRequestHeader() {
-        return header;
-    }
-
-    @Override
-    public String getRequestParms() {
-        return parms;
-    }
-
-    @Override
-    public String getRequestUrl() {
-        return url;
-    }
-
-}
-
-```
-
-其中id是唯一id、url网络请求地址、parm网络请求参数、header网络请求请求头字段。
-
-如何订阅请求代码如下：
-
-```
-PreNetworkHelper.getInstance().addObserver(new PNObserver() {
-            @Override
-            public void call(PNRequestObservable observable) {
-                final String result = observable.getResult();// 获取网络请求内容 ， 这里发生在非ui线程中。observable就是被观察者实例
-                runOnUiThread(new Runnable() {
-                    @Override
-                    public void run() {
-                        //... do samething
-                    }
-                });
-            }
-
-            @Override
-            public String getId() {
-                return "web_data";// 唯一id
-            }
-        }).removeRequestObservable("web_data");// 请求用完了可以移除 ，如果不移除将会一直保存在内存中，注意： 这个步骤要到addObserver 
-```
-
-
-### 深入使用
-
-基本上公司开发app都会自己封装自己的网络请求框架，pre-network 使用网络请求是基础的HttpURLConnection：
-
-```
-        executor.submit(new Runnable() {
-            @Override
-            public void run() {
-                if ("GET".equals(getRequestMethod()))
-                    result = PNGetPostUtil.sendGet(getRequestUrl(), getRequestParms(), getRequestHeader());
-
-                if ("POST".equals(getRequestMethod()))
-                    result = PNGetPostUtil.sendPost(getRequestUrl(), getRequestParms(), getRequestHeader());
-
-                dataChange();
-            }
-        });
-```
-
-那么是用自己公司网络请求，首先要创建一个实现PNRequestObservable类的请求体，这里一继承okhttp为例子：
-
-```
-/**
- * Created by liyihang on 18-1-17.
- */
-
-public class MyRequestObservable extends PNRequestObservable {
-
-    private static final OkHttpClient HTTP_CLIENT=new OkHttpClient();
-
-    @Override
-    public String getId() {
-        return "request_id";// 唯一id
-    }
-
-    @Override
-    public Map<String, String> getRequestHeader() {
-        return null;
-    }
-
-    @Override
-    public String getRequestParms() {
-        return null;
-    }
-
-    @Override
-    public String getRequestUrl() {
-        return null;
-    }
-
-    @Override
-    public void handlerRequest() {
-//        super.handlerRequest(); 将原来网络请求处理方法关闭
-        Request.Builder builder=new Request.Builder();
-        builder.url("https://www.baidu.com/");
-        HTTP_CLIENT.newCall(builder.build()).enqueue(new Callback() {
-            @Override
-            public void onFailure(Request request, IOException e) {
-                //网络完毕后必须调用
-                requestPost(null);
-            }
-
-            @Override
-            public void onResponse(Response response) throws IOException {
-                String data = response.body().string();
-
-                // do samething......
-
-                //网络完毕后必须调用
-                requestPost(data);
-            }
-        });
+        return MainActivity.url_id_only;//要订阅的网络请求唯一id
     }
 }
-
 ```
 
-调用方法例如：
+所有回调都在UI线程中。
 
-```
-        PreNetworkHelper.getInstance()
-                .removeAllObservable()// 删除所有请求
-                .addRequestObservable(new MyRequestObservable())// 添加请求和执行
-                .addObserver(new PNObserver() { //添加回调
-                    @Override
-                    public void call(PNRequestObservable observable) {
-                        MyRequestObservable result= (MyRequestObservable) observable;
-                        PNUtils.msg("end:"+result.getResult());
-                    }
 
-                    @Override
-                    public String getId() {
-                        return "request_id";
-                    }
-                })
-                .removeAllObservable();
-```
 
-作者：一航
+
+#### 参与贡献
+
+1. Jason 李一航
+
+
+#### 邮箱反馈
+
+邮箱：mhh.you@hotmail.com
