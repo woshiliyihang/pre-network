@@ -3,6 +3,7 @@
 #### 项目介绍
 pre-network是一款android网络框架，更加准确的说法是观察者模式预处理器；它主要的特点是预处理网络加载，设计思想是使用观察者模式的订阅式网络框架。
 
+
 #### 软件架构
 基于观察者模式的设计，每个网络请求相当于一个被观察者，每个使用这个网络请求地方只需要添加观察者，就可以获取网络请求数据，每个网络请求必须是唯一的，可以添加多个观察者。
 
@@ -49,25 +50,25 @@ public class UpdateUI extends PNBaseObserver {
     }
 
     @Override
-    public void pre() {//请求开始前
+    public void pre() {//订阅回调开始
         // 删除网络请求被观察者，如果不删除一直保存在内存中
         PreNetworkHelper.getInstance().removeRequestObservable(MainActivity.url_id_only);
     }
 
     @Override
-    public void result(String res) {//成功处理函数
+    public void result(String res) {//网络请求成功处理函数
         if (activity.get()==null)
             return;
         activity.get().sendStateSelf(PNBaseActivity.getMsgObj(10, res));
     }
 
     @Override
-    public void error(String err) {//失败处理
+    public void error(String err) {//网络请求失败处理函数
         Toast.makeText(activity.get(), err, Toast.LENGTH_LONG).show();
     }
 
     @Override
-    public void end() {// 请求结束后
+    public void end() {// 订阅回调结束
 
     }
 
@@ -85,7 +86,7 @@ public class UpdateUI extends PNBaseObserver {
 
 #### 参与贡献
 
-1. Jason 李一航
+1. 李一航
 
 
 #### 邮箱反馈
