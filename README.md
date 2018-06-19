@@ -86,7 +86,7 @@ public class UpdateUI extends PNBaseObserver {
 
 #### 参与贡献
 
-1. 李一航
+1. 李一航，Jason li
 
 
 #### 邮箱反馈
