@@ -4,6 +4,7 @@ import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.net.Uri;
@@ -40,6 +41,9 @@ import java.util.regex.Pattern;
 public class PNUtils {
 
 
+    public static SharedPreferences getSharedPreferences(Context context) {
+        return context.getSharedPreferences("cx_config", Context.MODE_PRIVATE);
+    }
 
     public static long[] getRemainingTime(long sysTime){
         long m = 1000L;

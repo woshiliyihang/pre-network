@@ -1,3 +1,11 @@
 <resources>
     <string name="app_name">lib_pre_network</string>
+
+    <string name="lm_preper">滑底部加载数据</string>
+    <string name="lm_loading">正在加载更多数据...</string>
+    <string name="lm_no_more">- - - - 我也是有底线的 - - - -</string>
+    <string name="rf_preper">下拉刷新</string>
+    <string name="rf_loading">数据加载中...</string>
+    <string name="rf_load_ok">加载完毕</string>
+    <string name="rf_refresh">释放刷新</string>
 </resources>
