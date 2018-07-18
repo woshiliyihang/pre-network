@@ -1,11 +1,10 @@
-package com.chengxing.cxsdk;
+package com.chengxing.liyihang;
 
 import android.content.Context;
 import android.content.res.Configuration;
 import android.content.res.Resources;
 import android.os.Build;
 import android.os.LocaleList;
-import android.util.Log;
 
 import com.prenetwork.liyihang.lib_pre_network.PNUtils;
 

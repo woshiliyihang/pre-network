@@ -1,4 +1,4 @@
-package com.chengxing.cxsdk;
+package com.chengxing.liyihang;
 
 import android.app.Activity;
 import android.app.DownloadManager;

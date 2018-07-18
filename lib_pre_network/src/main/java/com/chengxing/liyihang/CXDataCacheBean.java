@@ -1,4 +1,4 @@
-package com.chengxing.cxsdk;
+package com.chengxing.liyihang;
 
 public class CXDataCacheBean extends CXBean {
 

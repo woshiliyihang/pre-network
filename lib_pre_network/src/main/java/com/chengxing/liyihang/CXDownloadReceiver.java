@@ -1,4 +1,4 @@
-package com.chengxing.cxsdk;
+package com.chengxing.liyihang;
 
 import android.app.DownloadManager;
 import android.content.BroadcastReceiver;
