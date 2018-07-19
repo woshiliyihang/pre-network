@@ -1,4 +1,4 @@
-# pre-network V 1.3.1
+# pre-network V 1.3.2
 
 #### 项目介绍
 
@@ -16,7 +16,7 @@ pre-netwokr is fast network tools
 
 1. 引用依赖
 ```
-implementation 'com.liyihang:pre-network:1.3.1'
+implementation 'com.liyihang:pre-network:1.3.2'
 ```
 
 
