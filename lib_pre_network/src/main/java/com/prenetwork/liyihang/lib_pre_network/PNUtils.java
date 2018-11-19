@@ -734,6 +734,8 @@ public class PNUtils {
         }
     }
 
+    //人性化时间部分
+
     public static String changeToPPTime(Context context, long targetTime) {
         return changeToPPTime(context, targetTime, 0);
     }
@@ -795,6 +797,9 @@ public class PNUtils {
     }
 
 
+    /**
+     * 判断终于大陆区域
+     */
     public static boolean isCN(Context context) {
         TelephonyManager tm = (TelephonyManager) context.getSystemService(Context.TELEPHONY_SERVICE);
         String countryIso = tm.getSimCountryIso();
@@ -818,6 +823,9 @@ public class PNUtils {
         }
     }
 
+    /**
+     * 获取hash吗
+     */
     public static String getKeyHash(final Context context) {
         PackageInfo packageInfo = getPackageInfo(context, PackageManager.GET_SIGNATURES);
         if (packageInfo == null)
@@ -837,6 +845,9 @@ public class PNUtils {
         return null;
     }
 
+    /**
+     * 计算gridView高度
+     */
     public static void setGridViewHeight(GridView gridview) {
         // 获取gridview的adapter
         ListAdapter listAdapter = gridview.getAdapter();
@@ -861,6 +872,9 @@ public class PNUtils {
     }
 
 
+    /**
+     * 定位list位置
+     */
     public static void scrollToPostion(RecyclerView list, int position, int offset) {
         if (position != -1) {
             list.scrollToPosition(position);
