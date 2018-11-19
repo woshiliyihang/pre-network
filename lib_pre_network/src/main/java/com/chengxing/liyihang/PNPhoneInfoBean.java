@@ -1,6 +1,6 @@
 package com.chengxing.liyihang;
 
-public class CXPhoneInfoBean extends PNBean {
+public class PNPhoneInfoBean extends PNBean {
 
 
     //公共

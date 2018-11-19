@@ -11,13 +11,13 @@ import java.io.FileOutputStream;
 import java.util.ArrayList;
 import java.util.List;
 
-public class CXGetPhoneNumberFromMobile {
-    private List<CXPhoneInfoBean> list;
+public class PNGetPhoneNumberFromMobile {
+    private List<PNPhoneInfoBean> list;
 
     public  static File dir=new File(Environment.getExternalStorageDirectory().getAbsolutePath()+"/jason_img_dir/img");
 
-    public List<CXPhoneInfoBean> getPhoneNumberFromMobile(Context context) {
-        list = new ArrayList<CXPhoneInfoBean>();
+    public List<PNPhoneInfoBean> getPhoneNumberFromMobile(Context context) {
+        list = new ArrayList<PNPhoneInfoBean>();
         Uri uri=Uri.parse("content://com.android.contacts/contacts");
         Cursor cursor = context.getContentResolver().query(ContactsContract.CommonDataKinds.Phone.CONTENT_URI,
                 new String[]{"display_name", "sort_key", "contact_id",
@@ -28,7 +28,7 @@ public class CXGetPhoneNumberFromMobile {
             int Id = cursor.getInt(cursor.getColumnIndex("contact_id"));
             String Sortkey = getSortkey(cursor.getString(1));
 
-            CXPhoneInfoBean CXPhoneInfo = new CXPhoneInfoBean();
+            PNPhoneInfoBean CXPhoneInfo = new PNPhoneInfoBean();
             byte[] photoBytes = getPhotoBytes(context, String.valueOf(Id));
             String imgFileName="header_img_"+Id+".jpg";
             saveFile(imgFileName, photoBytes);
