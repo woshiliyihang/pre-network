@@ -11,13 +11,13 @@ import android.support.v4.content.FileProvider;
 
 import java.io.File;
 
-public class CXVersionCheckUtils {
+public class PNVersionCheckUtils {
 
     private static File saveFile;
     private Activity activity;
     private static long downloadId = 0;
 
-    public CXVersionCheckUtils(Activity activity) {
+    public PNVersionCheckUtils(Activity activity) {
         this.activity = activity;
         initFile();
     }

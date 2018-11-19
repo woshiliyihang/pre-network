@@ -10,29 +10,29 @@ import com.prenetwork.liyihang.lib_pre_network.PNUtils;
 
 import java.util.Locale;
 
-public class CXLangManager {
+public class PNLangManager {
 
-    public static final String tag=CXLangManager.class.getSimpleName();
+    public static final String tag=PNLangManager.class.getSimpleName();
 
-    private static CXLangManager manager=null;
+    private static PNLangManager manager=null;
 
-    public static CXLangManager getInstance() {
-        synchronized (CXLangManager.class) {
+    public static PNLangManager getInstance() {
+        synchronized (PNLangManager.class) {
             if (manager==null) {
-                manager=new CXLangManager();
+                manager=new PNLangManager();
             }
         }
         return manager;
     }
 
-    private CXLangManager(){
+    private PNLangManager(){
     }
 
     public static final String langKey="config_lang";
 
     private Context context;
 
-    public CXLangManager init(Context context){
+    public PNLangManager init(Context context){
         this.context=context;
         String configLang = getConfigLang();
         msg("init getConfigLang lang="+configLang);
@@ -44,7 +44,7 @@ public class CXLangManager {
         PNUtils.msg(s);
     }
 
-    public CXLangManager changeConfigLang(String lname){
+    public PNLangManager changeConfigLang(String lname){
         msg("changeConfigLang==="+lname);
         if (lname==null)
         {
@@ -74,7 +74,7 @@ public class CXLangManager {
         return city;
     }
 
-    public CXLangManager useLang(Context context){
+    public PNLangManager useLang(Context context){
         String name=getConfigLang();
         if (name!=null) {
             changeLang(context,name);
@@ -92,7 +92,7 @@ public class CXLangManager {
     }
 
 
-    public CXLangManager changeLang(Context context, String name){
+    public PNLangManager changeLang(Context context, String name){
         Locale locale=new Locale(name);
         Locale.setDefault(locale);
         Configuration configuration=new Configuration();

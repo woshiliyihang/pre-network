@@ -2,7 +2,7 @@ package com.chengxing.liyihang;
 
 import android.support.v7.widget.RecyclerView;
 
-public class CXPauseLoadingImgListener extends RecyclerView.OnScrollListener {
+public class PNPauseLoadingImgListener extends RecyclerView.OnScrollListener {
 
     private OnListImgLoaderListener imageLoader;
 
@@ -11,7 +11,7 @@ public class CXPauseLoadingImgListener extends RecyclerView.OnScrollListener {
         void pause();
     }
 
-    public CXPauseLoadingImgListener(OnListImgLoaderListener imageLoader) {
+    public PNPauseLoadingImgListener(OnListImgLoaderListener imageLoader) {
         this.imageLoader = imageLoader;
     }
 

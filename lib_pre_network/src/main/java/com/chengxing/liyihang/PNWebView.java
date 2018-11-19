@@ -8,20 +8,20 @@ import android.webkit.JavascriptInterface;
 import android.webkit.ValueCallback;
 import android.widget.ProgressBar;
 
-public class CXWebView extends android.webkit.WebView {
+public class PNWebView extends android.webkit.WebView {
 
     public static final int get_header=11;
     public static final int go_back=12;
 
-    public CXWebView(Context context) {
+    public PNWebView(Context context) {
         super(context);
     }
 
-    public CXWebView(Context context, AttributeSet attrs) {
+    public PNWebView(Context context, AttributeSet attrs) {
         super(context, attrs);
     }
 
-    public CXWebView(Context context, AttributeSet attrs, int defStyleAttr) {
+    public PNWebView(Context context, AttributeSet attrs, int defStyleAttr) {
         super(context, attrs, defStyleAttr);
     }
 

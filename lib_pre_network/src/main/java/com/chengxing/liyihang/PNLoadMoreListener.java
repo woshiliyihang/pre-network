@@ -3,14 +3,14 @@ package com.chengxing.liyihang;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 
-public class CXLoadMoreListener extends RecyclerView.OnScrollListener {
+public class PNLoadMoreListener extends RecyclerView.OnScrollListener {
 
     private int lastVisibleItem;
     private RecyclerView.Adapter<RecyclerView.ViewHolder> testMovieAdapter;
     private Runnable runnable;
     private LinearLayoutManager linearLayoutManager;
 
-    public CXLoadMoreListener(RecyclerView.Adapter<RecyclerView.ViewHolder> testMovieAdapter, LinearLayoutManager linearLayoutManager, Runnable runnable) {
+    public PNLoadMoreListener(RecyclerView.Adapter<RecyclerView.ViewHolder> testMovieAdapter, LinearLayoutManager linearLayoutManager, Runnable runnable) {
         this.testMovieAdapter = testMovieAdapter;
         this.runnable = runnable;
         this.linearLayoutManager = linearLayoutManager;

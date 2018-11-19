@@ -5,12 +5,12 @@ import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 
-public class CXDownloadReceiver extends BroadcastReceiver {
+public class PNDownloadReceiver extends BroadcastReceiver {
     @Override
     public void onReceive(Context context, Intent intent) {
         if (intent.getAction().equals(DownloadManager.ACTION_DOWNLOAD_COMPLETE)) {
             long id = intent.getLongExtra(DownloadManager.EXTRA_DOWNLOAD_ID, -1);
-            CXVersionCheckUtils.installApk(context);
+            PNVersionCheckUtils.installApk(context);
         } else if (intent.getAction().equals(DownloadManager.ACTION_NOTIFICATION_CLICKED)) {
             Intent viewDownloadIntent = new Intent(DownloadManager.ACTION_VIEW_DOWNLOADS);
             viewDownloadIntent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
@@ -21,7 +21,7 @@ public class CXDownloadReceiver extends BroadcastReceiver {
 }
 
 
-//<receiver android:name=".CXDownloadReceiver">
+//<receiver android:name=".PNDownloadReceiver">
 //<intent-filter>
 //<action android:name="android.intent.action.DOWNLOAD_COMPLETE" />
 //<action android:name="android.intent.action.DOWNLOAD_NOTIFICATION_CLICKED" />

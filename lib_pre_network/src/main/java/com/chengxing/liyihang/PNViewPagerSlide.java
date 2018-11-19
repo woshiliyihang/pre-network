@@ -7,7 +7,7 @@ import android.support.v4.view.ViewPager;
 import android.util.AttributeSet;
 import android.view.MotionEvent;
 
-public class CXViewPagerSlide extends ViewPager {
+public class PNViewPagerSlide extends ViewPager {
 
     private boolean isSlide = true;
 
@@ -15,11 +15,11 @@ public class CXViewPagerSlide extends ViewPager {
         isSlide = slide;
     }
 
-    public CXViewPagerSlide(@NonNull Context context) {
+    public PNViewPagerSlide(@NonNull Context context) {
         super(context);
     }
 
-    public CXViewPagerSlide(@NonNull Context context, @Nullable AttributeSet attrs) {
+    public PNViewPagerSlide(@NonNull Context context, @Nullable AttributeSet attrs) {
         super(context, attrs);
     }
 

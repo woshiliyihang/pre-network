@@ -13,7 +13,7 @@ import com.prenetwork.liyihang.lib_pre_network.R;
 
 import java.util.List;
 
-public class CXLoadMoreAdapterHelper {
+public class PNLoadMoreAdapterHelper {
 
     public static final int TYPE_FOOTER=417;
     public static final int IS_BOTTOM=414;
@@ -29,7 +29,7 @@ public class CXLoadMoreAdapterHelper {
         this.backColor = backColor;
     }
 
-    public CXLoadMoreAdapterHelper(Context context) {
+    public PNLoadMoreAdapterHelper(Context context) {
         this.context = context;
     }
 

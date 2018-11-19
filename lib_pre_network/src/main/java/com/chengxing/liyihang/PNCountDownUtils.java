@@ -3,12 +3,12 @@ package com.chengxing.liyihang;
 
 import android.os.Handler;
 
-public class CXCountDownUtils implements Runnable {
+public class PNCountDownUtils implements Runnable {
     private int time=60;
     private Handler handler;
     private boolean isEnd;
 
-    public CXCountDownUtils(int time, Handler handler, OnCountDownlistner onCountDownlistner) {
+    public PNCountDownUtils(int time, Handler handler, OnCountDownlistner onCountDownlistner) {
         this.time = time;
         this.handler = handler;
         this.onCountDownlistner = onCountDownlistner;

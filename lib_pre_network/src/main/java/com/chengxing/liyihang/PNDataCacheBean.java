@@ -1,6 +1,6 @@
 package com.chengxing.liyihang;
 
-public class CXDataCacheBean extends CXBean {
+public class PNDataCacheBean extends PNBean {
 
     public int cid;
     public String keyid;
@@ -8,7 +8,7 @@ public class CXDataCacheBean extends CXBean {
     public long mtime;
     public int nums;
 
-    public CXDataCacheBean(int newsid, String keyid, String jsonstr, long mtime, int nums) {
+    public PNDataCacheBean(int newsid, String keyid, String jsonstr, long mtime, int nums) {
         this.cid = newsid;
         this.keyid = keyid;
         this.jsonstr = jsonstr;
@@ -16,13 +16,13 @@ public class CXDataCacheBean extends CXBean {
         this.nums = nums;
     }
 
-    public CXDataCacheBean(String keyid, String jsonstr, long mtime) {
+    public PNDataCacheBean(String keyid, String jsonstr, long mtime) {
         this.keyid = keyid;
         this.jsonstr = jsonstr;
         this.mtime = mtime;
     }
 
-    public CXDataCacheBean(int newsid, String keyid, String jsonstr, long mtime) {
+    public PNDataCacheBean(int newsid, String keyid, String jsonstr, long mtime) {
         this.cid = newsid;
         this.keyid = keyid;
         this.jsonstr = jsonstr;
@@ -31,7 +31,7 @@ public class CXDataCacheBean extends CXBean {
 
     @Override
     public String toString() {
-        return "CXDataCacheBean{" +
+        return "PNDataCacheBean{" +
                 "cid=" + cid +
                 ", keyid='" + keyid + '\'' +
                 ", jsonstr='" + jsonstr + '\'' +

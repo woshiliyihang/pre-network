@@ -6,7 +6,7 @@ import android.database.Cursor;
 import android.net.Uri;
 import android.provider.MediaStore;
 
-public class CXSelectImgUtils {
+public class PNSelectImgUtils {
 
     private Activity activity;
 
@@ -20,7 +20,7 @@ public class CXSelectImgUtils {
         this.imgUrl = imgUrl;
     }
 
-    public CXSelectImgUtils(Activity activity) {
+    public PNSelectImgUtils(Activity activity) {
         this.activity = activity;
     }
 

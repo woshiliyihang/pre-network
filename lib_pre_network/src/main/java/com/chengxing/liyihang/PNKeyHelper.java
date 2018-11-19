@@ -5,7 +5,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.view.WindowManager;
 
-public class CXKeyHelper implements View.OnLayoutChangeListener {
+public class PNKeyHelper implements View.OnLayoutChangeListener {
 
     private Activity activity;
 
@@ -24,7 +24,7 @@ public class CXKeyHelper implements View.OnLayoutChangeListener {
         this.closeRun = closeRun;
     }
 
-    public CXKeyHelper(Activity activity) {
+    public PNKeyHelper(Activity activity) {
         this.activity = activity;
     }
 

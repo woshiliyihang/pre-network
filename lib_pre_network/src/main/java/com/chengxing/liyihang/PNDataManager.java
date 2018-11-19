@@ -5,26 +5,26 @@ import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 
-public class CXDataManager extends SQLiteOpenHelper {
+public class PNDataManager extends SQLiteOpenHelper {
 
-    private static CXDataManager manager=null;
+    private static PNDataManager manager=null;
 
-    public static CXDataManager getInstance(Context context) {
-        synchronized (CXDataManager.class) {
+    public static PNDataManager getInstance(Context context) {
+        synchronized (PNDataManager.class) {
             if (manager==null) {
-                manager=new CXDataManager(context);
+                manager=new PNDataManager(context);
             }
         }
         return manager;
     }
 
-    public synchronized static CXDataManager getInstance() {
+    public synchronized static PNDataManager getInstance() {
         return manager;
     }
 
     private Context context;
 
-    private CXDataManager(Context context) {
+    private PNDataManager(Context context) {
         super(context, "cx_database", null, 1);
         this.context=context;
     }
@@ -54,8 +54,8 @@ public class CXDataManager extends SQLiteOpenHelper {
         return nums;
     }
 
-    public CXDataCacheBean getCache(String keyid){
-        CXDataCacheBean bean=null;
+    public PNDataCacheBean getCache(String keyid){
+        PNDataCacheBean bean=null;
         SQLiteDatabase writableDatabase = getWritableDatabase();
 
         Cursor cursor = writableDatabase.rawQuery("select *,count(*) as nums from  newsinfo where keyid=?", new String[]{keyid});
@@ -67,14 +67,14 @@ public class CXDataManager extends SQLiteOpenHelper {
             String kid = cursor.getString(cursor.getColumnIndex("keyid"));
             String jsonstr = cursor.getString(cursor.getColumnIndex("jsonstr"));
             long mtime=cursor.getLong(cursor.getColumnIndex("mtime"));
-            bean=new CXDataCacheBean(newsid,kid, jsonstr, mtime, nums);
+            bean=new PNDataCacheBean(newsid,kid, jsonstr, mtime, nums);
         }
 
         writableDatabase.close();
         return bean;
     }
 
-    public CXDataManager delCache(String keyid){
+    public PNDataManager delCache(String keyid){
         SQLiteDatabase writableDatabase = getWritableDatabase();
 
         writableDatabase.execSQL("delete from newsinfo where keyid=?", new String[]{keyid});
@@ -83,7 +83,7 @@ public class CXDataManager extends SQLiteOpenHelper {
         return this;
     }
 
-    public CXDataManager clearCache(){
+    public PNDataManager clearCache(){
         SQLiteDatabase writableDatabase = getWritableDatabase();
 
         writableDatabase.execSQL("delete from newsinfo");
@@ -92,7 +92,7 @@ public class CXDataManager extends SQLiteOpenHelper {
         return this;
     }
 
-    public CXDataManager insertCache(String keyid, String jsonstr){
+    public PNDataManager insertCache(String keyid, String jsonstr){
         SQLiteDatabase writableDatabase = getWritableDatabase();
         writableDatabase.beginTransaction();
 
