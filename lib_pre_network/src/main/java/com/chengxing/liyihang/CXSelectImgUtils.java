@@ -267,7 +267,7 @@ public class CXSelectImgUtils {
         return videoPath2;
     }
 
-    private void uploadFile2(final Context context, final CXTokenBean tokenBean) {
+    protected void uploadFile2(final Context context, final CXTokenBean tokenBean) {
         File file=new File(videoPath);
         loadingUtils.openLoading();
         //上传文件
@@ -276,7 +276,7 @@ public class CXSelectImgUtils {
         //loadingUtils.closeLoading();
     }
 
-    private void uploadFile(final Context context, final CXTokenBean tokenBean) {
+    protected void uploadFile(final Context context, final CXTokenBean tokenBean) {
         File file=new File(getImgUrl());
         loadingUtils.openLoading();
         if (updateImgUrlListener!=null)
