@@ -9,6 +9,7 @@ import android.widget.LinearLayout;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 
+import com.prenetwork.liyihang.lib_pre_network.PNUtils;
 import com.prenetwork.liyihang.lib_pre_network.R;
 
 import java.util.List;
@@ -24,6 +25,7 @@ public class PNLoadMoreAdapterHelper {
     private Context context;
 
     private int backColor;
+    private FooterHolder footerHolder;
 
     public void setBackColor(int backColor) {
         this.backColor = backColor;
@@ -42,10 +44,11 @@ public class PNLoadMoreAdapterHelper {
         int getType();
     }
 
-    public RecyclerView.ViewHolder getHolder(Context context, ViewGroup parent, int viewType, CXGetHolderListener holderListener){
+    public RecyclerView.ViewHolder getHolder(Context context,ViewGroup parent, int viewType, CXGetHolderListener holderListener){
         if (viewType==TYPE_FOOTER) {
             View contactView = LayoutInflater.from(context).inflate(R.layout.cx_load_more_footer, parent, false);
-            return new FooterHolder(contactView);
+            footerHolder = new FooterHolder(contactView);
+            return footerHolder;
         }else {
             return holderListener.getHolder();
         }
@@ -77,24 +80,34 @@ public class PNLoadMoreAdapterHelper {
             if (loadMoreStatus==IS_BOTTOM)
             {
                 holder.footer_font.setText(context.getResources().getString(R.string.lm_preper));
+                isShowFooter(holder.itemView, true);
                 holder.stopProgress();
             }else if (loadMoreStatus==LOAD_MORE)
             {
                 holder.footer_font.setText(context.getResources().getString(R.string.lm_loading));
+                isShowFooter(holder.itemView, true);
                 holder.startProgress();
             }else if (loadMoreStatus==NO_MORE)
             {
-                holder.footer_font.setText(context.getResources().getString(R.string.lm_no_more));
+//                holder.footer_font.setText(context.getResources().getString(R.string.lm_no_more));
+                holder.footer_font.setText(null);
+                isShowFooter(holder.itemView, false);
                 holder.stopProgress();
             }
-            if (backColor!=0)
-            {
+            if (backColor!=0) {
                 holder.footer_layout.setBackgroundColor(context.getResources().getColor(backColor));
             }
         }else {
             runnable.run();
         }
     }
+
+    private void isShowFooter(View itemView, boolean b) {
+        ViewGroup.LayoutParams layoutParams = itemView.getLayoutParams();
+        layoutParams.height=b? PNUtils.dp2px(itemView.getContext(), 37) : 0;
+        itemView.setLayoutParams(layoutParams);
+    }
+
 
     public void changeMoreStatus(int status) {
         loadMoreStatus = status;
@@ -104,15 +117,21 @@ public class PNLoadMoreAdapterHelper {
         return mItemList.size()==0 ? 0:mItemList.size()+1;
     }
 
+    public int getItemCount(int count){
+        return count==0 ? 0:count+1;
+    }
+
     public static class FooterHolder extends RecyclerView.ViewHolder
     {
 
         TextView footer_font;
         LinearLayout footer_layout;
         ProgressBar bar;
+        View itemView;
 
         public FooterHolder(View itemView) {
             super(itemView);
+            this.itemView=itemView;
             footer_font=itemView.findViewById(R.id.footer_font);
             footer_layout=itemView.findViewById(R.id.footer_layout);
             bar=itemView.findViewById(R.id.indicator);
@@ -120,13 +139,13 @@ public class PNLoadMoreAdapterHelper {
         }
 
         public void startProgress(){
-            if (bar.getVisibility()== View.GONE){
+            if (bar.getVisibility()==View.GONE){
                 bar.setVisibility(View.VISIBLE);
             }
         }
 
         public void stopProgress(){
-            if (bar.getVisibility()== View.VISIBLE){
+            if (bar.getVisibility()==View.VISIBLE){
                 bar.setVisibility(View.GONE);
             }
         }
