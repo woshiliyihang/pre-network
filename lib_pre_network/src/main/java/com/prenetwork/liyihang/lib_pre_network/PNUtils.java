@@ -47,6 +47,8 @@ import android.widget.GridView;
 import android.widget.ImageView;
 import android.widget.ListAdapter;
 
+import com.chengxing.liyihang.PNToastUtils;
+
 import org.json.JSONObject;
 
 import java.io.ByteArrayOutputStream;
@@ -426,6 +428,18 @@ public class PNUtils {
                 }
             }
         }
+    }
+
+    public static void toast(Context context, String msg) {
+        PNToastUtils.getInstance().showToastByTime(msg);
+    }
+
+    public static void toast(String msg) {
+        PNToastUtils.getInstance().showToastByTime(msg);
+    }
+
+    public static void toast2(String msg, String id) {
+        toast(msg);
     }
 
     public static void msg( String msg){
