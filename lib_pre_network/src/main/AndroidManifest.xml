@@ -4,6 +4,7 @@
 
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
     <uses-sdk tools:overrideLibrary="com.prenetwork.liyihang.lib_pre_network,io.rong.imkit,io.rong.imlib, com.facebook.react" />
+    <uses-permission android:name="android.permission.INTERNET" />
 
     <application>
         <provider
