@@ -1,20 +1,5 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools"
     package="com.prenetwork.liyihang.lib_pre_network">
-
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
-    <uses-sdk tools:overrideLibrary="com.prenetwork.liyihang.lib_pre_network,io.rong.imkit,io.rong.imlib, com.facebook.react" />
     <uses-permission android:name="android.permission.INTERNET" />
-
-    <application>
-        <provider
-            android:name="android.support.v4.content.FileProvider"
-            android:authorities="com.chengxing.comchenxingnetapp.FileProvider"
-            android:exported="false"
-            android:grantUriPermissions="true">
-            <meta-data
-                android:name="android.support.FILE_PROVIDER_PATHS"
-                android:resource="@xml/file_paths" />
-        </provider>
-    </application>
 </manifest>
