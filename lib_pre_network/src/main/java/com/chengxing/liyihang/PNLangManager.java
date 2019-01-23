@@ -12,7 +12,7 @@ import java.util.Locale;
 
 public class PNLangManager {
 
-    public static final String tag=PNLangManager.class.getSimpleName();
+    public static final String tag= PNLangManager.class.getSimpleName();
 
     private static PNLangManager manager=null;
 

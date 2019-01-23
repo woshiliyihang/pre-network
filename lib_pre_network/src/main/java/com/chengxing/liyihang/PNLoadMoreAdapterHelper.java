@@ -44,7 +44,7 @@ public class PNLoadMoreAdapterHelper {
         int getType();
     }
 
-    public RecyclerView.ViewHolder getHolder(Context context,ViewGroup parent, int viewType, CXGetHolderListener holderListener){
+    public RecyclerView.ViewHolder getHolder(Context context, ViewGroup parent, int viewType, CXGetHolderListener holderListener){
         if (viewType==TYPE_FOOTER) {
             View contactView = LayoutInflater.from(context).inflate(R.layout.cx_load_more_footer, parent, false);
             footerHolder = new FooterHolder(contactView);
@@ -54,7 +54,7 @@ public class PNLoadMoreAdapterHelper {
         }
     }
 
-    public void noFooterHandle(RecyclerView.ViewHolder holder,Runnable runnable){
+    public void noFooterHandle(RecyclerView.ViewHolder holder, Runnable runnable){
         if (holder instanceof FooterHolder)
         {
             // do samething ....

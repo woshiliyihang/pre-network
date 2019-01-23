@@ -2,10 +2,14 @@ package com.prenetwork.liyihang.lib_pre_network;
 
 import android.app.Activity;
 import android.content.Context;
+import android.support.v7.widget.RecyclerView;
 import android.util.SparseArray;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
+import android.widget.FrameLayout;
+import android.widget.GridLayout;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
@@ -19,7 +23,7 @@ public class PNViewHodlerUtils {
 	private View mConvertView;
 
 	public static PNViewHodlerUtils get(Context context, View convertView,
-										ViewGroup parent, int layoutId, int position) {
+                                        ViewGroup parent, int layoutId, int position) {
 		if (convertView == null) {
 			return new PNViewHodlerUtils(context, parent, layoutId, position);
 		} else {
@@ -71,6 +75,16 @@ public class PNViewHodlerUtils {
 		TextView textView=getView(object, id);
 		return textView;
 	}
+
+	public static Button mButton(Object object, int id){
+		Button mView=getView(object, id);
+		return mView;
+	}
+
+	public static RecyclerView mRecyclerView(Object object, int id){
+		RecyclerView mView=getView(object, id);
+		return mView;
+	}
 	
 	public static RelativeLayout mRelativeLayout(Object object, int id){
 		RelativeLayout relativeLayout=getView(object, id);
@@ -85,6 +99,16 @@ public class PNViewHodlerUtils {
 	public static ViewGroup mViewGroup(Object object, int id){
 		ViewGroup relativeLayout=getView(object, id);
 		return relativeLayout;
+	}
+
+	public static FrameLayout mFrameLayout(Object object, int id){
+		FrameLayout mView=getView(object, id);
+		return mView;
+	}
+
+	public static GridLayout mGridLayout(Object object, int id){
+		GridLayout mView=getView(object, id);
+		return mView;
 	}
 	
 	public ViewGroup getViewGroup(int id){

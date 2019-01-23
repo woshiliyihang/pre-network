@@ -57,8 +57,6 @@ public class PNGetPostUtil {
             URL realUrl = new URL(url);
             conn = (HttpURLConnection) realUrl.openConnection();
             conn.setConnectTimeout(10000);
-            conn.setReadTimeout(10000);
-            conn.setUseCaches(false);
             conn.setRequestMethod(method);
             conn.setDoOutput(true);
             conn.setDoInput(true);

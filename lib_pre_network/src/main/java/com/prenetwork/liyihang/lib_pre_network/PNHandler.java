@@ -1,8 +1,8 @@
 package com.prenetwork.liyihang.lib_pre_network;
 
 import android.os.Handler;
+import android.os.Looper;
 import android.os.Message;
-
 
 
 public class PNHandler extends Handler {
@@ -15,8 +15,21 @@ public class PNHandler extends Handler {
 		init();
 	}
 
+	public boolean isStop() {
+		return isStop;
+	}
+
+	public void setStop(boolean stop) {
+		isStop = stop;
+	}
+
 	public PNHandler(Callback callback){
 		super(callback);
+		init();
+	}
+
+	public PNHandler(Looper looper){
+		super(looper);
 		init();
 	}
 

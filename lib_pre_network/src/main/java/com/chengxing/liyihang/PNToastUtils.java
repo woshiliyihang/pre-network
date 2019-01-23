@@ -11,6 +11,8 @@ import android.view.WindowManager;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.prenetwork.liyihang.lib_pre_network.PNUtils;
+
 import java.lang.ref.WeakReference;
 
 public class PNToastUtils {
@@ -50,7 +52,7 @@ public class PNToastUtils {
     }
 
     public void showToastByThread(final Context context, final CharSequence msg, final int length) {
-        new Thread(new Runnable() {
+        PNUtils.runThread(new Runnable() {
             @Override
             public void run() {
                 mHandler.post(new Runnable() {
@@ -70,7 +72,7 @@ public class PNToastUtils {
                     }
                 });
             }
-        }).start();
+        });
     }
 
     //方法二:注意此方法不能再子线程中使用

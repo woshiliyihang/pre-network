@@ -20,17 +20,17 @@ public class PNPauseLoadingImgListener extends RecyclerView.OnScrollListener {
         super.onScrollStateChanged(recyclerView, newState);
 
 
-        if(newState==RecyclerView.SCROLL_STATE_SETTLING){
+        if(newState== RecyclerView.SCROLL_STATE_SETTLING){
             //end
             imageLoader.resume();
         }
 
-        if (newState==RecyclerView.SCROLL_STATE_DRAGGING)
+        if (newState== RecyclerView.SCROLL_STATE_DRAGGING)
         {
             //move
         }
 
-        if (newState==RecyclerView.SCROLL_STATE_IDLE)
+        if (newState== RecyclerView.SCROLL_STATE_IDLE)
         {
             //idle
             imageLoader.pause();

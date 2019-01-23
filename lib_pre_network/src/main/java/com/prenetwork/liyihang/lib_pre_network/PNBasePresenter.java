@@ -2,34 +2,35 @@ package com.prenetwork.liyihang.lib_pre_network;
 
 import android.os.Handler;
 import android.os.Message;
-import android.os.Messenger;
 import android.util.Log;
 
 import java.util.Observable;
+import java.util.Observer;
 
 
+public abstract class PNBasePresenter extends Observable implements PNMvpInterface, PNReplyMessageInterface, PNBaseActivity.OnGetReplyMsgListener {
 
-public abstract class PNBasePresenter extends Observable implements PNMvpInterface, Handler.Callback, PNReplyMessageInterface, PNBaseActivity.OnGetReplyMsgListener {
-
-    public static final String tag=PNBasePresenter.class.getSimpleName();
-
-    private Messenger messenger;
-    private Messenger replyMsg;
+    public static final String tag= PNBasePresenter.class.getSimpleName();
+    private PNReplyHandler replyMsg;
     private Message message;
-
-    @Override
-    public void setMsg(Messenger msg) {
-        messenger=msg;
-    }
+    private Observer observer;
 
     public void sendState(Message message){
-        synchronized (this)
-        {
-            this.message = message;
-            setChanged();
-            notifyObservers();
-            Log.i(tag, "sendState"+message.what+"==="+message.obj);
+        synchronized (this) {
+            try {
+                this.message = message;
+                observer.update(this, message);
+                Log.i(tag, "sendState"+message.what+"==="+message.obj);
+            } catch (Exception e) {
+                Log.i(tag, "sendState error:"+e.getMessage());
+                e.printStackTrace();
+            }
         }
+    }
+
+    @Override
+    public void setMsgContent(Object observer) {
+        this.observer= (Observer) observer;
     }
 
     @Override
@@ -38,19 +39,15 @@ public abstract class PNBasePresenter extends Observable implements PNMvpInterfa
     }
 
     @Override
-    public Messenger getMsg() {
-        replyMsg=new Messenger(new Handler(this));
+    public Handler getMsg() {
+        replyMsg=new PNReplyHandler();
+        replyMsg.setReplyMessageInterface(this);
+        replyMsg.setRunsUIThread(true);
         return replyMsg;
     }
 
-    @Override
-    public boolean handleMessage(Message msg) {
-        replyMessage(msg);
-        return false;
-    }
-
     public static Message getMsgObj(int what, Object object){
-        return PNBaseActivity.getMsgObj(what, object);
+        return PNUtils.msgObj(what, object);
     }
 
 }

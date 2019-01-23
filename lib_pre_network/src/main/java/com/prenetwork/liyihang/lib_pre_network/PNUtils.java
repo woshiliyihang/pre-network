@@ -2,6 +2,7 @@ package com.prenetwork.liyihang.lib_pre_network;
 
 import android.annotation.SuppressLint;
 import android.app.Activity;
+import android.app.ActivityManager;
 import android.app.NotificationChannel;
 import android.app.NotificationManager;
 import android.content.ComponentName;
@@ -22,6 +23,7 @@ import android.os.Build;
 import android.os.Environment;
 import android.os.Handler;
 import android.os.Looper;
+import android.os.Message;
 import android.provider.MediaStore;
 import android.support.annotation.NonNull;
 import android.support.v4.app.NotificationCompat;
@@ -29,23 +31,30 @@ import android.support.v4.content.ContextCompat;
 import android.support.v4.graphics.drawable.DrawableCompat;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.telephony.PhoneNumberUtils;
 import android.telephony.TelephonyManager;
 import android.text.Editable;
 import android.text.Html;
+import android.text.Spannable;
+import android.text.SpannableString;
 import android.text.Spanned;
 import android.text.TextUtils;
 import android.text.TextWatcher;
+import android.text.style.ClickableSpan;
+import android.text.style.ForegroundColorSpan;
 import android.util.Base64;
 import android.util.DisplayMetrics;
 import android.util.Log;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.Window;
 import android.view.WindowManager;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.EditText;
 import android.widget.GridView;
 import android.widget.ImageView;
 import android.widget.ListAdapter;
+import android.widget.Toast;
 
 import com.chengxing.liyihang.PNToastUtils;
 
@@ -55,7 +64,7 @@ import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
-import java.io.IOException;
+import java.lang.reflect.Field;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 import java.text.SimpleDateFormat;
@@ -64,9 +73,9 @@ import java.util.List;
 import java.util.Locale;
 import java.util.Map;
 import java.util.Set;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
 import java.util.regex.Pattern;
-
-import static android.content.pm.PackageManager.GET_SIGNATURES;
 
 /**
  * Created by liyihang on 18-1-17.
@@ -74,9 +83,26 @@ import static android.content.pm.PackageManager.GET_SIGNATURES;
 
 public class PNUtils {
 
+    private static PNHandler handler;
+
+    public static PNHandler getHandler() {
+        if (handler==null)
+            handler=new PNHandler(Looper.getMainLooper());
+        return handler;
+    }
 
     public static SharedPreferences getSharedPreferences(Context context) {
         return context.getSharedPreferences("cx_config", Context.MODE_PRIVATE);
+    }
+    public static String getCurProcessName(Context context) {
+        int pid = android.os.Process.myPid();
+        ActivityManager activityManager = (ActivityManager) context.getSystemService(Context.ACTIVITY_SERVICE);
+        for (ActivityManager.RunningAppProcessInfo appProcess : activityManager.getRunningAppProcesses()) {
+            if (appProcess.pid == pid) {
+                return appProcess.processName;
+            }
+        }
+        return null;
     }
 
     public static long[] getRemainingTime(long sysTime){
@@ -97,33 +123,34 @@ public class PNUtils {
         return outs;
     }
 
-    public static boolean savePhotoToSDCard(Bitmap photoBitmap, String path, String photoName) {
-        boolean ret = false;
+    public static String savePhotoToSDCard(Bitmap photoBitmap, String path, String photoName, boolean delOld) {
+        String ret = null;
         File dir = new File(path);
         if (!dir.exists()) {
             dir.mkdirs();
         }
 
         File photoFile = new File(path, photoName + ".jpg");
+        if (delOld && photoFile.exists())
+        {
+            photoFile.delete();
+        }
         FileOutputStream fileOutputStream = null;
         try {
             fileOutputStream = new FileOutputStream(photoFile);
             if (photoBitmap != null) {
                 if (photoBitmap.compress(Bitmap.CompressFormat.JPEG, 100, fileOutputStream)) {
                     fileOutputStream.flush();
-                    ret = true;
+                    ret=photoFile.getAbsolutePath();
                 }
             }
-        } catch (FileNotFoundException e) {
-            photoFile.delete();
-            e.printStackTrace();
-        } catch (IOException e) {
+        } catch (Exception e) {
             photoFile.delete();
             e.printStackTrace();
         } finally {
             try {
                 fileOutputStream.close();
-            } catch (IOException e) {
+            } catch (Exception e) {
                 e.printStackTrace();
             }
         }
@@ -238,6 +265,34 @@ public class PNUtils {
         return ( value!=null && !TextUtils.equals(value,"") ) ? value : defaultVal;
     }
 
+    public static int statusBarHeight=-1;
+
+    public static void handleStatusView(View statusView) {
+        ViewGroup.LayoutParams layoutParams = statusView.getLayoutParams();
+        if (statusBarHeight==-1)
+            statusBarHeight= PNUtils.getStatusBarHeight(statusView.getContext());
+        layoutParams.height=statusBarHeight;
+        statusView.setLayoutParams(layoutParams);
+    }
+
+    public static void setStatusBarColor(Activity activity, int vk_black) {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {//因为不是所有的系统都可以设置颜色的，在4.4以下就不可以。。有的说4.1，所以在设置的时候要检查一下系统版本是否是4.1以上
+            Window window = activity.getWindow();
+            window.addFlags(WindowManager.LayoutParams.FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS);
+            window.setStatusBarColor(activity.getResources().getColor(vk_black));
+        }
+    }
+
+    public static void setAndroidNativeLightStatusBar(Activity activity, boolean dark) {
+        View decor = activity.getWindow().getDecorView();
+        if (dark) {
+            decor.setSystemUiVisibility(View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN | View.SYSTEM_UI_FLAG_LIGHT_STATUS_BAR);
+        } else {
+            decor.setSystemUiVisibility(View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN | View.SYSTEM_UI_FLAG_LAYOUT_STABLE);
+        }
+    }
+
+
 
     public static class BindTextClear implements View.OnFocusChangeListener, TextWatcher {
 
@@ -245,6 +300,10 @@ public class PNUtils {
         private ImageView imageView;
         private boolean hasFocus;
         private Runnable runnable;
+
+        public boolean isHasFocus() {
+            return hasFocus;
+        }
 
         public void setRunnable(Runnable runnable) {
             this.runnable = runnable;
@@ -277,10 +336,10 @@ public class PNUtils {
 
         @Override
         public void onFocusChange(View v, boolean hasFocus) {
-            call();
             this.hasFocus = hasFocus;
+            call();
             if (editText.getText().length()>0){
-                imageView.setVisibility(View.VISIBLE);
+                imageView.setVisibility(View.INVISIBLE);
             }else {
                 imageView.setVisibility(View.INVISIBLE);
             }
@@ -292,9 +351,8 @@ public class PNUtils {
 
         @Override
         public void onTextChanged(CharSequence s, int start, int before, int count) {
-            call();
             if (editText.getText().length()>0){
-                imageView.setVisibility(View.VISIBLE);
+                imageView.setVisibility(View.INVISIBLE);
             }else {
                 imageView.setVisibility(View.INVISIBLE);
             }
@@ -365,6 +423,23 @@ public class PNUtils {
         idCard = idCard.toLowerCase();
         String REGEX_ID_CARD = "(^\\d{15}$)|(^\\d{17}([0-9]|x)$)";
         return Pattern.matches(REGEX_ID_CARD, idCard);
+    }
+
+
+    public static SpannableString replaceClickFont(String str,int start, int end,int color, final Handler.Callback callback){
+        SpannableString span = new SpannableString(str);
+        span.setSpan(new ClickableSpan(){
+            @Override
+            public void onClick(View widget) {
+                Message msg=new Message();
+                msg.what=79;
+                msg.obj=widget;
+                callback.handleMessage(msg);
+
+            }
+        }, start, end, Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
+        span.setSpan(new ForegroundColorSpan(color),start, end,Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
+        return span;
     }
 
 
@@ -550,15 +625,39 @@ public class PNUtils {
     }
 
     public static void runOnUI(Runnable runnable) {
-        new Handler(Looper.getMainLooper()).post(runnable);
+        getHandler().post(runnable);
     }
 
     public static void runOnUI(int time, Runnable runnable) {
-        new Handler(Looper.getMainLooper()).postDelayed(runnable, time);
+        getHandler().postDelayed(runnable, time);
     }
 
+    public static final ExecutorService EXECUTOR=Executors.newFixedThreadPool(2);
+
     public static void runThread(Runnable runnable) {
-        new Thread(runnable).start();
+        EXECUTOR.submit(runnable);
+    }
+
+    @SuppressLint("PrivateApi")
+    public static int getStatusBarHeight(Context context) {
+        Class<?> c;
+        Object obj;
+        Field field;
+        int x, statusBarHeight = 0;
+        try {
+            c = Class.forName("com.android.internal.R$dimen");
+            obj = c.newInstance();
+            field = c.getField("status_bar_height");
+            x = Integer.parseInt(field.get(obj).toString());
+            statusBarHeight = context.getResources().getDimensionPixelSize(x);
+        } catch (Exception e1) {
+            e1.printStackTrace();
+        }
+        if (statusBarHeight==0)
+        {
+            statusBarHeight= (int) Math.ceil(20 * context.getResources().getDisplayMetrics().density);
+        }
+        return statusBarHeight;
     }
 
     /**
@@ -885,6 +984,88 @@ public class PNUtils {
         gridview.setLayoutParams(params);
     }
 
+    /**
+     * 调起系统功能发短信
+     * @param phoneNumber
+     * @param message
+     */
+    public static void doSendSMSTo(Context context,String phoneNumber,String message){
+        if(PhoneNumberUtils.isGlobalPhoneNumber(phoneNumber)){
+            Intent intent = new Intent(Intent.ACTION_SENDTO, Uri.parse("smsto:"+phoneNumber));
+            intent.putExtra("sms_body", message);
+            context.startActivity(intent);
+        }else {
+            msg("send phone message error:"+message+"++"+phoneNumber);
+        }
+    }
+
+    public static void goGoogleStore(Context context){
+        //这里开始执行一个应用市场跳转逻辑，默认this为Context上下文对象
+        Intent intent = new Intent(Intent.ACTION_VIEW);
+        intent.setData(Uri.parse("market://details?id=" + context.getPackageName())); //跳转到应用市场，非Google Play市场一般情况也实现了这个接口
+        //存在手机里没安装应用市场的情况，跳转会包异常，做一个接收判断
+        if (intent.resolveActivity(context.getPackageManager()) != null) { //可以接收
+            context.startActivity(intent);
+        } else { //没有应用市场，我们通过浏览器跳转到Google Play
+            intent.setData(Uri.parse("https://play.google.com/store/apps/details?id=" + context.getPackageName()));
+            //这里存在一个极端情况就是有些用户浏览器也没有，再判断一次
+            if (intent.resolveActivity(context.getPackageManager()) != null) { //有浏览器
+                context.startActivity(intent);
+            } else { //天哪，这还是智能手机吗？
+                Toast.makeText(context, "you need install google store", Toast.LENGTH_SHORT).show();
+            }
+        }
+    }
+
+    public static boolean isWeixinAvilible(Context context) {
+        final PackageManager packageManager = context.getPackageManager();// 获取packagemanager
+        List<PackageInfo> pinfo = packageManager.getInstalledPackages(0);// 获取所有已安装程序的包信息
+        if (pinfo != null) {
+            for (int i = 0; i < pinfo.size(); i++) {
+                String pn = pinfo.get(i).packageName;
+                if (pn.equals("com.tencent.mm")) {
+                    return true;
+                }
+            }
+        }
+
+        return false;
+    }
+
+    /**
+     * 判断qq是否可用
+     *
+     * @param context
+     * @return
+     */
+    public static boolean isQQClientAvailable(Context context) {
+        final PackageManager packageManager = context.getPackageManager();
+        List<PackageInfo> pinfo = packageManager.getInstalledPackages(0);
+        if (pinfo != null) {
+            for (int i = 0; i < pinfo.size(); i++) {
+                String pn = pinfo.get(i).packageName;
+                if (pn.equals("com.tencent.mobileqq")) {
+                    return true;
+                }
+            }
+        }
+        return false;
+    }
+
+
+    public static void handleLayoutWidth(ViewGroup view, int s) {
+        ViewGroup.LayoutParams layoutParams = view.getLayoutParams();
+        layoutParams.width=s;
+        view.setLayoutParams(layoutParams);
+    }
+
+    public static Message msgObj(int what, Object object){
+        Message obtain = Message.obtain();
+        obtain.obj = object;
+        obtain.what = what;
+        return obtain;
+    }
+
 
     /**
      * 定位list位置
@@ -898,6 +1079,8 @@ public class PNUtils {
                 mLayoutManager.scrollToPositionWithOffset(position, PNUtils.dp2px(list.getContext(), offset));
         }
     }
+
+
 
 
 }
