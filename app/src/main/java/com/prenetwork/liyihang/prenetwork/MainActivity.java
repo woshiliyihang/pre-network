@@ -55,7 +55,7 @@ public class MainActivity extends PNBaseActivity implements View.OnClickListener
 
         //pre network loading data ....
         // plase use your self network framework ， here is Simple network util
-        PreNetworkHelper.getInstance().addRequestObservable(new PNQuickRequest(url_id_only, "https://blog.csdn.net/mhhyoucom/",null, null, "GET"));
+        PreNetworkHelper.getInstance().addRequestObservable(new RequestBind(url_id_only, "https://blog.csdn.net/mhhyoucom/",null, null, "GET"));
 
         if (PNRouterManager.getInstance().getTopRouter()==null)
         {
