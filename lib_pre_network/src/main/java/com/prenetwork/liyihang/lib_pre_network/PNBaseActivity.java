@@ -52,18 +52,9 @@ public abstract class PNBaseActivity extends AppCompatActivity implements PNRepl
 
     private final class Runs implements Runnable{
         Message message;
-
-        public Runs setMessage(Message message) {
-            this.message = message;
-            return this;
-        }
-
-        public Runs(){ }
-
         public Runs(Message message) {
             this.message = message;
         }
-
         @Override
         public void run() {
             if (repHandler!=null)

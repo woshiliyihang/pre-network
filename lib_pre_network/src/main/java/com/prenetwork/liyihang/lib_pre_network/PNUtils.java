@@ -13,8 +13,15 @@ import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
 import android.content.pm.ResolveInfo;
 import android.content.pm.Signature;
+import android.content.res.Resources;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.graphics.BitmapShader;
+import android.graphics.Canvas;
+import android.graphics.Color;
+import android.graphics.Matrix;
+import android.graphics.Paint;
+import android.graphics.Shader;
 import android.graphics.drawable.Drawable;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
@@ -54,20 +61,24 @@ import android.widget.EditText;
 import android.widget.GridView;
 import android.widget.ImageView;
 import android.widget.ListAdapter;
+import android.widget.ListView;
 import android.widget.Toast;
 
 import com.chengxing.liyihang.PNToastUtils;
 
 import org.json.JSONObject;
 
+import java.io.BufferedOutputStream;
 import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
+import java.io.OutputStream;
 import java.lang.reflect.Field;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import java.util.Locale;
@@ -292,6 +303,77 @@ public class PNUtils {
         }
     }
 
+    public static Bitmap createHeaderBitmap(List<Bitmap> bitmaps,int maxWidth,int maxHeight, int columnNum, String backgroundColor) {
+        if (bitmaps.size()==0)
+            return null;
+        int itemWidth=maxWidth/columnNum;
+        int itemHeight=maxHeight/columnNum;
+        int row=-1;
+        int size =bitmaps.size();
+        Bitmap outputBitmap = Bitmap.createBitmap(maxWidth, maxHeight, Bitmap.Config.ARGB_8888);
+        Canvas canvas=new Canvas(outputBitmap);
+        canvas.drawColor(Color.parseColor(backgroundColor));
+        for (int i=0; i<size; i++) {
+            int column=i%columnNum;
+            if (column==0)
+                row++;
+            int xRaw = (int) (itemHeight*0.17f);
+            int yRaw = xRaw;
+            if (i==1 || i==3)
+                xRaw=-xRaw;
+            if (row==1)
+                yRaw = -yRaw;
+            if (size==3 && i==2)
+                xRaw = (int) (itemHeight*0.5f);
+            if (size==2 && row==0)
+                yRaw = (int) (itemHeight*0.5f);
+            Bitmap bitmap = getOvalBitmap(resizeBitmap(bitmaps.get(i), itemWidth));
+            if (size==1) {
+                canvas.drawBitmap(bitmap, 0, 0, null);
+            }else
+                canvas.drawBitmap(bitmap, column*itemWidth+xRaw, row*itemHeight+yRaw, null);
+            if (!bitmap.isRecycled())
+                bitmap.recycle();
+        }
+        return outputBitmap;
+    }
+
+    public static Bitmap getOvalBitmap(Bitmap input){
+        int size=input.getWidth();
+        Bitmap bitmap = Bitmap.createBitmap(size, size, Bitmap.Config.ARGB_8888);
+        Canvas canvas=new Canvas(bitmap);
+        BitmapShader shader=new BitmapShader(input, Shader.TileMode.CLAMP, Shader.TileMode.CLAMP);
+        Paint paint=new Paint();
+        paint.setShader(shader);
+        paint.setAntiAlias(true);
+        canvas.drawCircle(size/2.0f,size/2.0f,size/2.0f, paint);
+        if (!input.isRecycled())
+            input.recycle();
+        return bitmap;
+    }
+
+    public static boolean save(Bitmap src, File file, Bitmap.CompressFormat format, boolean recycle) {
+        if (isEmptyBitmap(src))
+            return false;
+
+        OutputStream os;
+        boolean ret = false;
+        try {
+            os = new BufferedOutputStream(new FileOutputStream(file));
+            ret = src.compress(format, 100, os);
+            if (recycle && !src.isRecycled())
+                src.recycle();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+        return ret;
+    }
+
+    public static boolean isEmptyBitmap(Bitmap src) {
+        return src == null || src.getWidth() == 0 || src.getHeight() == 0;
+    }
+
 
 
     public static class BindTextClear implements View.OnFocusChangeListener, TextWatcher {
@@ -300,6 +382,11 @@ public class PNUtils {
         private ImageView imageView;
         private boolean hasFocus;
         private Runnable runnable;
+        boolean isEnable=false;
+
+        public void setEnable(boolean enable) {
+            isEnable = enable;
+        }
 
         public boolean isHasFocus() {
             return hasFocus;
@@ -339,7 +426,7 @@ public class PNUtils {
             this.hasFocus = hasFocus;
             call();
             if (editText.getText().length()>0){
-                imageView.setVisibility(View.INVISIBLE);
+                imageView.setVisibility(isEnable?View.VISIBLE:View.INVISIBLE);
             }else {
                 imageView.setVisibility(View.INVISIBLE);
             }
@@ -352,7 +439,7 @@ public class PNUtils {
         @Override
         public void onTextChanged(CharSequence s, int start, int before, int count) {
             if (editText.getText().length()>0){
-                imageView.setVisibility(View.INVISIBLE);
+                imageView.setVisibility(isEnable?View.VISIBLE:View.INVISIBLE);
             }else {
                 imageView.setVisibility(View.INVISIBLE);
             }
@@ -376,6 +463,19 @@ public class PNUtils {
             e.printStackTrace();
         }
         return outs;
+    }
+
+
+    public static <T extends Object> List<T> getPreSizeList(List<T> oldList, int limit){
+        List<T> list=new ArrayList<>();
+        int index=0;
+        for (T o : oldList) {
+            if (index>=limit)
+                break;
+            list.add(o);
+            index++;
+        }
+        return list;
     }
 
 
@@ -416,6 +516,15 @@ public class PNUtils {
         options.inSampleSize = calculateInSampleSize(options, reqWidth);
         options.inJustDecodeBounds = false;
         return BitmapFactory.decodeFile(pathName, options);
+    }
+
+    public static Bitmap decodeSampledBitmapFromResource(Resources resources,int rid, int reqWidth) {
+        final BitmapFactory.Options options = new BitmapFactory.Options();
+        options.inJustDecodeBounds = true;
+        BitmapFactory.decodeResource(resources, rid,options);
+        options.inSampleSize = calculateInSampleSize(options, reqWidth);
+        options.inJustDecodeBounds = false;
+        return BitmapFactory.decodeResource(resources, rid, options);
     }
 
 
@@ -962,6 +1071,13 @@ public class PNUtils {
      * 计算gridView高度
      */
     public static void setGridViewHeight(GridView gridview) {
+        setGridViewHeight(gridview, -1, 0);
+    }
+
+    /**
+     * 计算gridView高度
+     */
+    public static void setGridViewHeight(GridView gridview, int rows, int addY) {
         // 获取gridview的adapter
         ListAdapter listAdapter = gridview.getAdapter();
         if (listAdapter == null) {
@@ -970,18 +1086,45 @@ public class PNUtils {
         // 固定列宽，有多少列
         int numColumns = gridview.getNumColumns(); //5
         int totalHeight = 0;
+        int mRows=0;
         // 计算每一列的高度之和
         for (int i = 0; i < listAdapter.getCount(); i += numColumns) {
+            if (rows!=-1 && mRows>=rows)
+                break;
             // 获取gridview的每一个item
             View listItem = listAdapter.getView(i, null, gridview);
             listItem.measure(0, 0);
             // 获取item的高度和
             totalHeight += listItem.getMeasuredHeight();
+            mRows++;
         }
         // 获取gridview的布局参数
         ViewGroup.LayoutParams params = gridview.getLayoutParams();
-        params.height = totalHeight;
+        params.height = totalHeight+addY;
         gridview.setLayoutParams(params);
+    }
+
+    public static void setListViewHeightBasedOnChildren(ListView listView) {
+        ListAdapter listAdapter = listView.getAdapter();
+        if (listAdapter == null) {
+            // pre-condition
+            return;
+        }
+
+        int totalHeight = 0;
+        for (int i = 0; i < listAdapter.getCount(); i++) {
+            View listItem = listAdapter.getView(i, null, listView);
+            // listItem.measure(0, 0);
+            listItem.measure(
+                    View.MeasureSpec.makeMeasureSpec(0, View.MeasureSpec.UNSPECIFIED),
+                    View.MeasureSpec.makeMeasureSpec(0, View.MeasureSpec.UNSPECIFIED));
+            totalHeight += listItem.getMeasuredHeight();
+        }
+
+        ViewGroup.LayoutParams params = listView.getLayoutParams();
+        params.height = totalHeight
+                + (listView.getDividerHeight() * (listAdapter.getCount() - 1));
+        listView.setLayoutParams(params);
     }
 
     /**
@@ -1078,6 +1221,57 @@ public class PNUtils {
             if (mLayoutManager != null)
                 mLayoutManager.scrollToPositionWithOffset(position, PNUtils.dp2px(list.getContext(), offset));
         }
+    }
+
+    /**
+     * 重置recyclerview高度
+     */
+    public static void handleRecyclerViewHeight(final RecyclerView recyclerView, final int defaultHeight, final Handler.Callback callback){
+        PNUtils.runOnUI(87, new Runnable() {
+            @Override
+            public void run() {
+                int sum=0;
+                LinearLayoutManager layoutManager = (LinearLayoutManager) recyclerView.getLayoutManager();
+                int startIndex = layoutManager.findFirstVisibleItemPosition();
+                int endIndex=layoutManager.findLastVisibleItemPosition();
+                for (int i=startIndex; i<=endIndex; i++) {
+                    View holderView = recyclerView.findViewWithTag(i);
+                    if (holderView!=null){
+                        int measuredHeight = holderView.getMeasuredHeight();
+                        sum+=measuredHeight;
+                    }
+                }
+                sum= (sum==0? PNUtils.dp2px(recyclerView.getContext(), defaultHeight):sum);
+                setViewHeight(recyclerView, sum);
+                Message message = PNUtils.msgObj(10, null);
+                message.arg1=sum;
+                callback.handleMessage(message);
+            }
+        });
+    }
+
+    public static void setViewHeight(View view, int height){
+        ViewGroup.LayoutParams layoutParams = view.getLayoutParams();
+        layoutParams.height=height;
+        view.setLayoutParams(layoutParams);
+    }
+
+    /**
+     * 重新修改图片大小
+     */
+    public static Bitmap resizeBitmap(Bitmap bitmap, int newWidth) {
+        return resizeBitmap(bitmap, newWidth, false);
+    }
+
+    public static Bitmap resizeBitmap(Bitmap bitmap, int newWidth, boolean isRecycler) {
+        float scaleWidth = ((float) newWidth) / bitmap.getWidth();
+        float scaleHeight = ((float) newWidth) / bitmap.getHeight();
+        Matrix matrix = new Matrix();
+        matrix.postScale(scaleWidth, scaleHeight);
+        Bitmap bmpScale = Bitmap.createBitmap(bitmap, 0, 0, bitmap.getWidth(), bitmap.getHeight(), matrix, true);
+        if (isRecycler && !bitmap.isRecycled())
+            bitmap.recycle();
+        return bmpScale;
     }
 
 

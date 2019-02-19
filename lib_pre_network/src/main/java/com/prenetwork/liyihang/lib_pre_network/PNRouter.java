@@ -19,6 +19,7 @@ import java.util.List;
 public class PNRouter {
 
     private String TAG="PNRouter";
+    public static final String ROUTER_AUGMENTS ="parm";
     private ArrayList<PhantomReference<Activity>> activityList;
     private ReferenceQueue<Activity> mReferenceQueue;
     private ArrayList<String> url;

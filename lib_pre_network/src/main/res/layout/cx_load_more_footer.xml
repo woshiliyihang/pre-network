@@ -7,14 +7,6 @@
     android:gravity="center"
     android:orientation="horizontal">
 
-    <!--<com.rey.material.widget.ProgressView-->
-        <!--android:id="@+id/progress_pv_circular_inout_colors"-->
-        <!--android:layout_width="32dp"-->
-        <!--android:layout_height="32dp"-->
-        <!--android:layout_gravity="center"-->
-        <!--android:layout_marginEnd="@dimen/dp_10"-->
-        <!--android:layout_marginRight="@dimen/dp_10"-->
-        <!--app:v_styleId="@array/pv_circular_in_colors" />-->
 
     <ProgressBar
         android:id="@+id/indicator"
